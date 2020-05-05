@@ -1,0 +1,14 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  display: -webkit-flex;
+  display:         flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
+
+  @extend %font-prim;
+}
