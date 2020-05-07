@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Private repository for @zzvipz",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.9.6"
+  },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
@@ -29,7 +32,8 @@
     "style": "sass --watch src/sass/style.scss src/sass/style.css",
     "start": "webpack-dev-server --open",
     "dev": "webpack --mode development --watch",
-    "prod": "webpack --mode production"
+    "prod": "webpack --mode production",
+    "build": "babel src -d lib"
   },
   "repository": {
     "type": "git",

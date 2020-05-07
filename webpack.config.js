@@ -26,9 +26,6 @@ module.exports = (env, options) => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-            },
           },
         },
         {
@@ -64,10 +61,11 @@ module.exports = (env, options) => {
       new CopyPlugin([
         // { from: 'src/assets/images', to: 'src/assets/images' },
         // { from: 'src/assets/media', to: 'src/assets/media' },
-        // { from: 'src/assets/svg', to: 'src/assets/svg' },
+        { from: 'src/assets/svg', to: 'src/assets/svg' },
       ]),
       new MiniCssExtractPlugin({
-        filename: '[name].css',
+        // filename: 'src/css/style.css',
+        filename: './style.css',
       }),
     ],
   };

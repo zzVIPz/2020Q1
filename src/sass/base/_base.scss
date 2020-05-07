@@ -11,4 +11,15 @@ body {
   background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
 
   @extend %font-prim;
+  @include font($size: 1.6rem, $height: 2.6rem, $weight: normal);
+}
+
+.main {
+  min-height: 100vh;
+}
+
+.title {
+  width: 100%;
+
+  text-align: center;
 }
