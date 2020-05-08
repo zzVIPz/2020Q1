@@ -1,0 +1,9 @@
+.card {
+  min-width: 320px;
+  padding: 10px;
+
+  object-fit: contain;
+  &__poster {
+    background: no-repeat;
+  }
+}

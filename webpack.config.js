@@ -59,7 +59,7 @@ module.exports = (env, options) => {
         chunks: ['index'],
       }),
       new CopyPlugin([
-        // { from: 'src/assets/images', to: 'src/assets/images' },
+        { from: 'src/assets/images', to: 'src/assets/images' },
         // { from: 'src/assets/media', to: 'src/assets/media' },
         { from: 'src/assets/svg', to: 'src/assets/svg' },
       ]),

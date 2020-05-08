@@ -15,7 +15,14 @@ body {
 }
 
 .main {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
   min-height: 100vh;
+}
+
+.container {
+  width: 100%;
 }
 
 .title {
