@@ -2,15 +2,15 @@ class View {
   constructor() {
     this.movieContainer = document.querySelector('.movie__cards-container');
     this.loaderContainer = document.querySelector('.loader-container');
+    this.indicatorContainer = document.querySelector('.indicator-container');
     this.properties = ['Title', 'Poster', 'Year', 'Rating', 'imdbID'];
     this.swiper = null;
-    this.loader = null;
   }
 
-  init(swiper, loader) {
+  init(swiper, loader, indicator) {
     this.loaderContainer.innerHTML = loader;
     this.movieContainer.innerHTML = swiper;
-    this.loader = document.querySelector('.loader');
+    this.indicatorContainer.innerHTML = indicator;
   }
 
   createCard(card, template) {

@@ -9,6 +9,7 @@ class Controller {
     this.btnClear = document.querySelector('.button__clear');
     this.container = document.querySelector('.movie__cards-container');
     this.loader = document.querySelector('.loader-container');
+    this.indicator = document.querySelector('.indicator-container');
     this.swiper = null;
     this.value = null;
     this.currentValue = null;
@@ -18,7 +19,7 @@ class Controller {
   }
 
   init() {
-    this.view.init(this.model.swiper, this.model.loader);
+    this.view.init(this.model.swiper, this.model.loader, this.model.indicator);
     this.swiper = new Swiper('.swiper-container', {
       // loop: true,
       // loopFillGroupWithBlank: true,
@@ -68,6 +69,13 @@ class Controller {
     this.addButtonClearClickHandler();
     this.addButtonSearchClickHandler();
     this.addSlideChangeHandler();
+    this.addLoaderHandler();
+  }
+
+  addLoaderHandler() {
+    document.addEventListener('load', () => {
+      console.log('loader');
+    });
   }
 
   addButtonEnterClickHandler() {
@@ -121,6 +129,7 @@ class Controller {
       this.getMovies(data);
     }
     if (data.Response === 'False') {
+      this.toggleIndicatorDisplay();
       //TODO: add div box with message
       console.log('Mistake', data);
     }
@@ -130,6 +139,7 @@ class Controller {
     const extendedData = await this.addMovieRating(data);
     this.setRequestPageNumber();
     this.toggleLoaderDisplay();
+    this.toggleIndicatorDisplay();
     this.renderCard(extendedData);
   }
 
@@ -187,6 +197,14 @@ class Controller {
     }
   }
 
+  toggleIndicatorDisplay(mode) {
+    if (mode) {
+      this.indicator.classList.remove('indicator--disabled');
+    } else {
+      this.indicator.classList.add('indicator--disabled');
+    }
+  }
+
   clearMoviesContainer() {
     this.swiper.removeAllSlides();
   }
@@ -206,6 +224,7 @@ class Controller {
       const index = this.swiper.activeIndex;
       if (index + 5 >= this.index) {
         this.index += 5;
+        this.toggleIndicatorDisplay(true);
         this.getRequestData(this.currentValue, this.page);
       }
     });

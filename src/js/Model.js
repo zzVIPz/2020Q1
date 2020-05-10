@@ -55,6 +55,13 @@ const MODEL = {
         </li>
       </ul>
     </div><span>Loading</span>`,
+  indicator: `
+    <div class="wrap">
+      <div class="loading">
+        <div class="bounceball"></div>
+        <div class="text">NOW LOADING</div>
+      </div>
+    </div>`,
 };
 
 export default MODEL;

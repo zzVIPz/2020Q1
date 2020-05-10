@@ -1,0 +1,65 @@
+$width: 15px;
+$height: 15px;
+$bounce_height: 30px;
+
+.indicator--disabled {
+  display: none;
+}
+
+.wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+.text {
+  display: inline-block;
+  margin-left: 5px;
+
+  color: #fbae17;
+}
+
+.bounceball {
+  position: relative;
+
+  display: inline-block;
+  width: $width;
+  height: 37px;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+
+    display: block;
+    width: $width;
+    height: $height;
+
+    background-color: #fbae17;
+    border-radius: 50%;
+    transform-origin: 50%;
+
+    animation: bounce 500ms alternate infinite ease;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    top: $bounce_height;
+
+    height: 5px;
+
+    border-radius: 60px 60px 20px 20px;
+    transform: scaleX(2);
+  }
+  35% {
+    height: $height;
+
+    border-radius: 50%;
+    transform: scaleX(1);
+  }
+  100% {
+    top: 0;
+  }
+}
