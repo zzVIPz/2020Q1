@@ -1,9 +1,19 @@
 .card {
-  min-width: 320px;
-  padding: 10px;
+  // object-fit: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  object-fit: contain;
+  &__title {
+    height: 50px;
+
+    text-align: center;
+  }
   &__poster {
     background: no-repeat;
+    img {
+      max-width: 268px;
+      height: 400px;
+    }
   }
 }

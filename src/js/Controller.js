@@ -1,3 +1,5 @@
+import Swiper from 'swiper';
+
 class Controller {
   constructor(model, view) {
     this.model = model;
@@ -6,19 +8,66 @@ class Controller {
     this.btnSearch = document.querySelector('.button__search');
     this.btnClear = document.querySelector('.button__clear');
     this.container = document.querySelector('.movie__cards-container');
+    this.loader = document.querySelector('.loader-container');
+    this.swiper = null;
     this.value = null;
-    this.previousValue = null;
-    this.defaultUrl = 'http://www.omdbapi.com/?{type}={key}&apikey=3affc28d';
+    this.currentValue = null;
+    this.index = 5;
+    this.page = 1;
+    this.defaultUrl = 'http://www.omdbapi.com/?{type}={key}&{page}apikey=3affc28d';
   }
 
   init() {
+    this.view.init(this.model.swiper, this.model.loader);
+    this.swiper = new Swiper('.swiper-container', {
+      // loop: true,
+      // loopFillGroupWithBlank: true,
+      breakpoints: {
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1,
+          slidesPerGroup: 1,
+        },
+        // when window width is >= 480px
+        640: {
+          slidesPerView: 2,
+          slidesPerGroup: 2,
+          spaceBetween: 30,
+        },
+        // when window width is >= 640px
+        960: {
+          slidesPerView: 3,
+          slidesPerGroup: 3,
+          spaceBetween: 40,
+        },
+        1280: {
+          slidesPerView: 4,
+          slidesPerGroup: 4,
+          spaceBetween: 40,
+        },
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+        dynamicMainBullets: 10,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+    console.log('swiper', this.swiper);
     this.addListeners();
+    this.toggleLoaderDisplay(true);
+    this.getRequestData('dream', 1);
   }
 
   addListeners() {
     this.addButtonEnterClickHandler();
     this.addButtonClearClickHandler();
     this.addButtonSearchClickHandler();
+    this.addSlideChangeHandler();
   }
 
   addButtonEnterClickHandler() {
@@ -32,7 +81,7 @@ class Controller {
   addButtonClearClickHandler() {
     const bntClear = document.querySelector('.button__clear');
     bntClear.addEventListener('click', () => {
-      this.input.value = '';
+      this.setDefaultState(true);
     });
   }
 
@@ -45,16 +94,26 @@ class Controller {
 
   checkValue() {
     const { value } = this.input;
-    console.log('*', value, typeof value);
-    if (value && value !== this.previousValue) {
-      this.previousValue = value;
-      this.getRequestData(value);
+    console.log('*', value, this.currentValue);
+    if (value && value !== this.currentValue) {
+      this.currentValue = value;
+      console.log('curValue', this.currentValue);
+      this.toggleLoaderDisplay(true);
+      this.setDefaultState();
+      this.getRequestData(value, this.page);
     }
   }
 
-  async getRequestData(value) {
-    const data = await this.getData('s', value);
+  async getRequestData(value, page) {
+    const data = await this.getData('s', value, page);
     const response = this.checkResponseData(data);
+  }
+
+  async getData(mode, value, page) {
+    const url = this.getCorrectUrl(mode, value, page);
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
   }
 
   checkResponseData(data) {
@@ -63,35 +122,53 @@ class Controller {
     }
     if (data.Response === 'False') {
       //TODO: add div box with message
-      this.clearMoviesContainer();
-      console.log('Mistake');
+      console.log('Mistake', data);
     }
   }
 
   async getMovies(data) {
-    const extentedData = await this.addMovieRating(data);
-    console.log('extentedData', extentedData);
-    this.renderCard(extentedData);
+    const extendedData = await this.addMovieRating(data);
+    this.setRequestPageNumber();
+    this.toggleLoaderDisplay();
+    this.renderCard(extendedData);
   }
 
-  async getData(mode, value) {
-    const url = this.getCorrectUrl(mode, value);
-    const res = await fetch(url);
-    const data = await res.json();
-    console.log(data);
-    return data;
+  renderCard(data) {
+    // this.toggleLoaderDisplay();
+    data.forEach((card) => {
+      const templateCard = this.view.createCard(card, this.model.card);
+      this.swiper.appendSlide(templateCard);
+    });
+    this.swiper.update();
+    if (this.page === 2) {
+      this.swiper.slideToLoop(0);
+    }
   }
 
-  getCorrectUrl(mode, value) {
+  setRequestPageNumber(key) {
+    if (key) {
+      this.page = 1;
+    } else {
+      this.page += 1;
+    }
+  }
+
+  getCorrectUrl(mode, value, page) {
     let url = this.defaultUrl.replace(/\{type\}/g, mode);
+    if (page) {
+      url = url.replace(/\{page\}/g, `page=${page}&`);
+    } else {
+      url = url.replace(/\{page\}/g, '');
+    }
     if (value) {
       url = url.replace(/\{key\}/g, value);
     }
+    console.log('url', url);
     return url;
   }
 
   addMovieRating(data) {
-    const extentedData = Promise.all(
+    const extendedData = Promise.all(
       data.Search.map(async (item) => {
         const movie = item;
         const movieDescription = await this.getData('i', movie.imdbID);
@@ -99,19 +176,39 @@ class Controller {
         return movie;
       }),
     );
-    return extentedData;
+    return extendedData;
   }
 
-  renderCard(data) {
-    this.clearMoviesContainer();
-    data.forEach((card) => {
-      const templateCard = this.view.createCard(card, this.model.card);
-      this.container.innerHTML += templateCard;
-    });
+  toggleLoaderDisplay(mode) {
+    if (mode) {
+      this.loader.classList.remove('loader--disabled');
+    } else {
+      this.loader.classList.add('loader--disabled');
+    }
   }
 
   clearMoviesContainer() {
-    this.container.innerHTML = '';
+    this.swiper.removeAllSlides();
+  }
+
+  setDefaultState(mode) {
+    if (mode) {
+      this.input.value = '';
+      this.currentValue = null;
+    }
+    this.clearMoviesContainer();
+    this.page = 1;
+    this.index = 5;
+  }
+
+  addSlideChangeHandler() {
+    this.swiper.on('slideChange', () => {
+      const index = this.swiper.activeIndex;
+      if (index + 5 >= this.index) {
+        this.index += 5;
+        this.getRequestData(this.currentValue, this.page);
+      }
+    });
   }
 }
 

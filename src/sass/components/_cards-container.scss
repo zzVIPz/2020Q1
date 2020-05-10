@@ -1,5 +1,10 @@
 .movie__cards-container {
+  position: relative;
+
   display: flex;
   flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 75%;
   overflow: hidden;
 }

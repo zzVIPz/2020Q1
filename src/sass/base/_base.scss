@@ -6,6 +6,7 @@ body {
   display: -webkit-flex;
   display:         flex;
   flex-direction: column;
+  justify-content: center;
   min-height: 100vh;
 
   background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
@@ -17,12 +18,16 @@ body {
 .main {
   display: flex;
   justify-content: center;
+  width: 100%;
   max-width: 1200px;
-  min-height: 100vh;
+  min-height: calc(100vh - 116px);
+  margin: 0 auto;
+  padding: 0 25px;
 }
 
 .container {
   width: 100%;
+  margin: 0 auto;
 }
 
 .title {
