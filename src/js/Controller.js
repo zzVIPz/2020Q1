@@ -10,12 +10,18 @@ class Controller {
     this.container = document.querySelector('.movie__cards-container');
     this.loader = document.querySelector('.loader-container');
     this.indicator = document.querySelector('.indicator-container');
+    this.info = document.querySelector('.movie__info-block');
     this.swiper = null;
     this.value = null;
     this.currentValue = null;
+    this.state = true;
     this.index = 5;
     this.page = 1;
-    this.defaultUrl = 'http://www.omdbapi.com/?{type}={key}&{page}apikey=3affc28d';
+    this.totalResults = 0;
+    this.loading = false;
+    this.movieApiUrl = this.model.movieApiUrl;
+    this.translateApiUrl = this.model.translateApiUrl;
+    // my 3affc28d
   }
 
   init() {
@@ -69,13 +75,7 @@ class Controller {
     this.addButtonClearClickHandler();
     this.addButtonSearchClickHandler();
     this.addSlideChangeHandler();
-    this.addLoaderHandler();
-  }
-
-  addLoaderHandler() {
-    document.addEventListener('load', () => {
-      console.log('loader');
-    });
+    this.addImagesLoaderHandler();
   }
 
   addButtonEnterClickHandler() {
@@ -100,11 +100,18 @@ class Controller {
     });
   }
 
-  checkValue() {
-    const { value } = this.input;
+  addImagesLoaderHandler() {
+    this.container.addEventListener('load', () => {
+      console.log('==================done============');
+    });
+  }
+
+  async checkValue() {
+    let { value } = this.input;
     console.log('*', value, this.currentValue);
     if (value && value !== this.currentValue) {
       this.currentValue = value;
+      value = await this.checkLanguage(value);
       console.log('curValue', this.currentValue);
       this.toggleLoaderDisplay(true);
       this.setDefaultState();
@@ -124,14 +131,52 @@ class Controller {
     return data;
   }
 
+  async checkLanguage(value) {
+    if (/[а-я]/i.test(value)) {
+      const data = await this.translateRequest(value);
+      return data;
+    }
+    return value;
+  }
+
+  async translateRequest(value) {
+    const url = this.translateApiUrl.replace(/\{text\}/g, value);
+    const result = await fetch(url);
+    const data = await result.json();
+    return data.text;
+  }
+
   checkResponseData(data) {
     if (data.Response === 'True') {
+      this.showResponseMessage(data);
       this.getMovies(data);
     }
     if (data.Response === 'False') {
+      this.toggleLoaderDisplay();
       this.toggleIndicatorDisplay();
-      //TODO: add div box with message
-      console.log('Mistake', data);
+      this.showResponseMessage(data);
+    }
+  }
+
+  showResponseMessage(data) {
+    console.log('Mistake', data);
+    if (data.Response === 'True' && this.currentValue) {
+      this.state = false;
+      let result = 'movies';
+      this.totalResults = data.totalResults;
+      if (data.totalResults === '1') {
+        result = 'movie';
+      }
+      this.info.innerHTML = `We have ${data.totalResults} ${result} for your request "${this.currentValue}"!`;
+    }
+    if (data.Response === 'False' && this.state) {
+      if (data.Error === 'Request limit reached!') {
+        this.info.innerHTML = this.model.errorMessage;
+      } else {
+        this.info.innerHTML = `We regret it, but for your request "${
+          this.currentValue
+        }" ${data.Error.toLowerCase()} Please, try again!`;
+      }
     }
   }
 
@@ -164,7 +209,7 @@ class Controller {
   }
 
   getCorrectUrl(mode, value, page) {
-    let url = this.defaultUrl.replace(/\{type\}/g, mode);
+    let url = this.movieApiUrl.replace(/\{type\}/g, mode);
     if (page) {
       url = url.replace(/\{page\}/g, `page=${page}&`);
     } else {
@@ -214,15 +259,18 @@ class Controller {
       this.input.value = '';
       this.currentValue = null;
     }
+    this.state = true;
+    this.info.innerHTML = '';
     this.clearMoviesContainer();
     this.page = 1;
     this.index = 5;
+    this.totalResults = 0;
   }
 
   addSlideChangeHandler() {
     this.swiper.on('slideChange', () => {
       const index = this.swiper.activeIndex;
-      if (index + 5 >= this.index) {
+      if (index + 5 >= this.index && index <= this.totalResults - 10) {
         this.index += 5;
         this.toggleIndicatorDisplay(true);
         this.getRequestData(this.currentValue, this.page);

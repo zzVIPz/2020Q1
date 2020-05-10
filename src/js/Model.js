@@ -1,4 +1,8 @@
 const MODEL = {
+  movieApiUrl: `http://www.omdbapi.com/?{type}={key}&{page}apikey=9748a5fd`,
+  translateApiUrl: `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200510T172835Z.0ad760ffcfd5afee.8993becde15a7714827f8f6577a3dca31ee25107&text={text}&lang=ru-en`,
+  errorMessage:
+    'We regret it, but today the limit of requests has been reached. Please, try again later!',
   swiper: `
     <div class="swiper-container">
       <div class="swiper-wrapper"></div>
