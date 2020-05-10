@@ -142,7 +142,7 @@
 .swiper-button-prev,
 .swiper-button-next {
   position: absolute;
-  top: 50%;
+  top: 615px;
   width: calc(var(--swiper-navigation-size) / 44 * 27);
   height: var(--swiper-navigation-size);
   margin-top: calc(-1 * var(--swiper-navigation-size) / 2);
@@ -297,7 +297,7 @@ button.swiper-pagination-bullet {
 }
 .swiper-container-horizontal > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 20px);
   white-space: nowrap;
 }
 .swiper-container-horizontal

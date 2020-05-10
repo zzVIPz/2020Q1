@@ -18,7 +18,8 @@ class View {
     return cardTemplate;
   }
 
-  getCorrectCardTemplate(data, template) {
+  getCorrectCardTemplate(card, template) {
+    const data = card;
     let cardTemplate = template;
     this.properties.forEach((property) => {
       if (data[property] === 'N/A' && property === 'Poster') {

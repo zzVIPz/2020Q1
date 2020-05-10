@@ -14,6 +14,7 @@ class Controller {
     this.swiper = null;
     this.value = null;
     this.currentValue = null;
+    this.value = null;
     this.state = true;
     this.index = 5;
     this.page = 1;
@@ -21,36 +22,30 @@ class Controller {
     this.loading = false;
     this.movieApiUrl = this.model.movieApiUrl;
     this.translateApiUrl = this.model.translateApiUrl;
-    // my 3affc28d
   }
 
   init() {
     this.view.init(this.model.swiper, this.model.loader, this.model.indicator);
     this.swiper = new Swiper('.swiper-container', {
-      // loop: true,
-      // loopFillGroupWithBlank: true,
       breakpoints: {
-        // when window width is >= 320px
         320: {
           slidesPerView: 1,
           slidesPerGroup: 1,
         },
-        // when window width is >= 480px
         640: {
           slidesPerView: 2,
           slidesPerGroup: 2,
-          spaceBetween: 30,
+          spaceBetween: 20,
         },
-        // when window width is >= 640px
-        960: {
+        900: {
           slidesPerView: 3,
           slidesPerGroup: 3,
-          spaceBetween: 40,
+          spaceBetween: 20,
         },
-        1280: {
+        1200: {
           slidesPerView: 4,
           slidesPerGroup: 4,
-          spaceBetween: 40,
+          spaceBetween: 20,
         },
       },
       pagination: {
@@ -64,7 +59,6 @@ class Controller {
         prevEl: '.swiper-button-prev',
       },
     });
-    console.log('swiper', this.swiper);
     this.addListeners();
     this.toggleLoaderDisplay(true);
     this.getRequestData('dream', 1);
@@ -101,27 +95,23 @@ class Controller {
   }
 
   addImagesLoaderHandler() {
-    this.container.addEventListener('load', () => {
-      console.log('==================done============');
-    });
+    //TODO: add lazy load image
   }
 
   async checkValue() {
-    let { value } = this.input;
-    console.log('*', value, this.currentValue);
+    const { value } = this.input;
     if (value && value !== this.currentValue) {
       this.currentValue = value;
-      value = await this.checkLanguage(value);
-      console.log('curValue', this.currentValue);
+      this.value = await this.checkLanguage(value);
       this.toggleLoaderDisplay(true);
       this.setDefaultState();
-      this.getRequestData(value, this.page);
+      this.getRequestData(this.value, this.page);
     }
   }
 
   async getRequestData(value, page) {
     const data = await this.getData('s', value, page);
-    const response = this.checkResponseData(data);
+    this.checkResponseData(data);
   }
 
   async getData(mode, value, page) {
@@ -159,7 +149,6 @@ class Controller {
   }
 
   showResponseMessage(data) {
-    console.log('Mistake', data);
     if (data.Response === 'True' && this.currentValue) {
       this.state = false;
       let result = 'movies';
@@ -167,7 +156,7 @@ class Controller {
       if (data.totalResults === '1') {
         result = 'movie';
       }
-      this.info.innerHTML = `We have ${data.totalResults} ${result} for your request "${this.currentValue}"!`;
+      this.info.innerHTML = `We have ${data.totalResults} ${result} for your request "${this.value}"!`;
     }
     if (data.Response === 'False' && this.state) {
       if (data.Error === 'Request limit reached!') {
@@ -189,7 +178,6 @@ class Controller {
   }
 
   renderCard(data) {
-    // this.toggleLoaderDisplay();
     data.forEach((card) => {
       const templateCard = this.view.createCard(card, this.model.card);
       this.swiper.appendSlide(templateCard);
@@ -218,7 +206,6 @@ class Controller {
     if (value) {
       url = url.replace(/\{key\}/g, value);
     }
-    console.log('url', url);
     return url;
   }
 

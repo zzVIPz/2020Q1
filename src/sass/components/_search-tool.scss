@@ -5,6 +5,7 @@
   flex-wrap: nowrap;
   height: 40px;
   margin: 0 10%;
+  margin-top: 45px;
 
   .movie__search {
     width: 100%;
@@ -14,4 +15,11 @@
     border-right: none;
     outline: none;
   }
+}
+
+.movie__info-block {
+  display: flex;
+  justify-content: center;
+  min-height: 46px;
+  padding-top: 20px;
 }
