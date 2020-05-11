@@ -260,7 +260,7 @@ class Controller {
       if (index + 5 >= this.index && index <= this.totalResults - 10) {
         this.index += 5;
         this.toggleIndicatorDisplay(true);
-        this.getRequestData(this.currentValue, this.page);
+        this.getRequestData(this.value, this.page);
       }
     });
   }
