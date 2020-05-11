@@ -7,14 +7,34 @@
 
   &__title {
     height: 50px;
+    overflow: hidden;
 
     text-align: center;
   }
   &__poster {
     background: no-repeat;
     img {
+      width: 100%;
       max-width: 268px;
       height: 400px;
+
+      object-fit: fill;
+    }
+  }
+
+  &__year {
+    margin-bottom: 0;
+  }
+
+  &__rating {
+    display: flex;
+
+    .star {
+      width: 25px;
+      height: 21px;
+      margin-right: 10px;
+
+      background: url("../assets/svg/rating.svg") center/21px no-repeat;
     }
   }
 }

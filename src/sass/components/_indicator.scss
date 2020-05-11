@@ -8,7 +8,7 @@ $bounce_height: 30px;
 
 .wrap {
   position: absolute;
-  top: 50%;
+  top: 35%;
   left: 50%;
 
   transform: translate(-50%, -50%);
@@ -18,7 +18,8 @@ $bounce_height: 30px;
   display: inline-block;
   margin-left: 5px;
 
-  color: #fbae17;
+  font-weight: bold;
+  color: #67132f;
 }
 
 .bounceball {
@@ -36,7 +37,7 @@ $bounce_height: 30px;
     width: $width;
     height: $height;
 
-    background-color: #fbae17;
+    background-color: #67132f;
     border-radius: 50%;
     transform-origin: 50%;
 
