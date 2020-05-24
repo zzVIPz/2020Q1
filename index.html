@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>ES6. Let, Const and arrow functions.</h1>
+					<p>
+						<small>Created by <a href="https://github.com/zzVIPz">Siarhei Tsialeha</a></small>
+					</p>
+				</section>
+				<section>
+					<section>
+						<h3>ES6</h3>
+						<p>was published in June 2015.	Major web browsers support main features for ES6.</p>
+						<img width="95%" height="15%" data-src="./img/Browsers.png" alt="web browsers support main features for ES6">
+					</section>
+					<section>
+						<h3>ES6 - New Features:</h3>
+						<ul>
+							<li>let and const keywords</li>
+							<li>Arrow functions</li>
+							<li>Default Parameter Values</li>
+							<li>Spread / Rest operators</li>
+							<li>Template strings</li>								
+							<li>Promises</li>
+							<li>and many more…</li>
+						</ul>						
+					</section>					
+				</section>
+				<section>
+					<section>
+						<h3>let and const keywords</h3>
+						<p>are two new ways of declaring variables that were introduced in ES6</p>
+					</section>					
+					<section data-markdown>
+							<script type="text/template">								
+								JavaScript let		
+								```
+								function foo() {
+									let a = 1,
+										b = 2;
+									/* let a = 5;      //throws SyntaxError: Identifier 'a' has 
+														 already been declared */
+									while (a < 2) {
+									  let b = 5;
+									  let c = a + b;   //notice that a is available here; b = 5;
+									  console.log(c);  //logs 6
+									  a += 1;
+									}
+									console.log(a);    //logs 2
+									console.log(b);    //logs 2
+									console.log(c);    //throws ReferenceError: c is not defined
+								  }
+								  
+								  foo();								
+								```
+							</script>
+					</section>		
+					<section data-markdown>
+							<script type="text/template">								
+								JavaScript const		
+								```
+								const MY_CONST = 7; 	//define MY_CONST as a constant and 
+														//give it the value 7
+								MY_CONST = 7;    	   //throws TypeError: Assignment to 
+														//constant variable
+								const MY_CONST = 20;	//throws Identifier 'MY_CONST' has 
+														//already been declared
+								let MY_CONST = 20;  	//this throws an error too							
+								```
+							</script>
+					</section>
+					<section data-markdown>
+							<script type="text/template">								
+								JavaScript const		
+								```
+								Example 1:
+								const ARR = [1, 2, 3];
+								ARR = [1, 2];			//throws TypeError: 
+														 //Assignment to constant variable.
+
+								Example 2:
+								const MY_ARR = [1, 2, 3];
+								MY_ARR[0] = 'a';
+								console.log(MY_ARR); 	//logs ["a", 2, 3]							
+								```
+							</script>
+					</section>					
+				</section>
+				<section>
+					<section>
+							<h3>Arrow functions</h3>
+							<p>are one of the more popular features of ES6</p>
+					</section>
+					<section data-markdown>
+							<script type="text/template">								
+								Arrow functions		
+								```
+								// ES5
+								let x = function(x, y) {
+									return x * y;
+								}
+
+								// ES6
+								let x = (x, y) => x * y;								
+								```
+							</script>
+					</section>
+					<section data-markdown>
+							<script type="text/template">								
+								Variations		
+								```
+								1. No parameters								
+								() => 42 || _ => 42
+
+								2. Single parameter		
+								x => 42  || (x) => 42
+
+								3. Multiple parameters
+								(x, y) => 42
+
+								4. “Block body”
+								let addArg = (x, y) => {
+								return x + y
+								}
+
+								5. Object literals
+								x =>({ y: x })							
+								```
+							</script>
+					</section>
+					<section data-markdown>
+							<script type="text/template">								
+								Main benefit: No binding of ‘this’	
+								```
+								function Person() {
+									this.age = 0;
+									setInterval(() => {
+									  this.age++; // 'this' properly refers to the Person object
+									}, 1000);
+								  }
+								  
+								  let p = new Person();								
+								```
+							</script>
+					</section>
+					<section data-markdown>
+							<script type="text/template">								
+								When you should use arrow functions
+								```
+								Example 1:
+								let array = [1, 4, 9, 16];
+								let  myArr = array.map(x => x * 2);   // myArr =[2, 8, 18, 32]
+
+								Example 2:
+								let arr = [0, 1, 2, 3];
+								let sum = arr.reduce((a, b) => {return a+b});   // sum = 6;								
+								```
+							</script>
+					</section>
+				</section>
+				<section>
+						<h2 >Thanks for your attention</h2>
+				</section>				
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
