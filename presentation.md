@@ -1,14 +1,14 @@
 # Presentation
 
-### link to YouTube video
+### link to YouTube video:
 
 https://www.youtube.com/watch?v=N5d6Kx10g8s&feature=youtu.be
 
-### link to Reveal presentation
+### link to Reveal presentation:
 
 https://zzvipz-presentation.netlify.app/
 
-### transcript of the presentation
+### presentation transcript:
 
 ES6. Let, Const and arrow functions.
 Hello. My name is Siarhei and today I’d like to tell you about ES6, let, const and arrow functions.
