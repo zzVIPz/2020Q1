@@ -8,7 +8,38 @@
 </head>
 
 <body>
-
+  <header class="header">
+    <h1 class="title">FancyWeather</h1>
+    <div class="controls">
+      <button class="button button__change-background"></button>
+      <button class="button button__choose-language"></button>
+      <button class="button button__temperature"></button>
+    </div>
+  </header>
+  <main class="main">
+    <div class="weather container">
+      <div class="weather__location-info"></div>
+      <div class="weather__date-info"></div>
+      <div class="weather__daily-forecast"></div>
+      <div class="weather__three-day-forecast"></div>
+    </div>
+    <div class="map">
+    </div>
+  </main>
+  <footer class="footer">
+    <!-- <div class="indicator-container indicator--disabled"></div> -->
+    <div class="search-tool">
+      <input class="search" type="text" placeholder="Enter your request here" autofocus>
+      <button class="button button__clear"></button>
+      <button class="button button__search"></button>
+    </div>
+    <div class="contacts">
+      <a class="link" href="https://telegram.me/zzVIPz" target="_blank">
+        <img src="./src/assets/svg/social-media.svg" alt="Telegram" />
+        zzVIPz
+      </a>
+    </div>
+  </footer>
 </body>
 
 </html>
