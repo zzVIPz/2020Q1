@@ -7,13 +7,18 @@
   <title>FancyWeather</title>
 </head>
 
-<body>
+<body class="body">
   <header class="header">
     <h1 class="title">FancyWeather</h1>
-    <div class="controls">
-      <button class="button button__change-background"></button>
-      <button class="button button__choose-language"></button>
-      <button class="button button__temperature"></button>
+    <div class="control">
+      <button class="button-change-background"></button>
+      <button class="button-choose-language"></button>
+      <div class="can-toggle">
+        <input id="a" type="checkbox">
+        <label for="a">
+          <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+        </label>
+      </div>
     </div>
   </header>
   <main class="main">
@@ -40,6 +45,7 @@
       </a>
     </div>
   </footer>
+  <img class="background">
 </body>
 
 </html>

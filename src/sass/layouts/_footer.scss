@@ -1,0 +1,45 @@
+.footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 47px;
+
+  background-color: $color-menu-train;
+  .contacts {
+    position: absolute;
+    right: 0;
+
+    .link {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 20px;
+
+      color: white;
+      text-decoration: none;
+
+      img {
+        height: 20px;
+        margin-right: 10px;
+      }
+      &:hover {
+        cursor: pointer;
+        filter: invert(52%) sepia(75%) saturate(7181%) hue-rotate(199deg) brightness(98%)
+        contrast(104%);
+      }
+    }
+  }
+}
+@media (max-width: 550px) {
+  .contacts {
+    display: none;
+  }
+
+  .search-tool .search {
+    width: 65%;
+  }
+}

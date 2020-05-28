@@ -6,9 +6,45 @@ body {
   display: -webkit-flex;
   display:         flex;
   flex-direction: column;
+  justify-content: center;
   min-height: 100vh;
 
   background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
+  background-size: cover;
 
   @extend %font-prim;
+  @include font($size: 1.6rem, $height: 2.6rem, $weight: normal);
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  min-height: calc(100vh - 93px);
+  margin: 0 auto;
+  padding: 0 25px;
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 10px;
+
+  text-align: center;
+  color: #ffffff;
+}
+
+.background {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  filter: contrast(60%) brightness(65%);
+
+  object-fit: cover;
 }
