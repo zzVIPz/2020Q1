@@ -1,10 +1,14 @@
-import data from './Model';
-
 class View {
-  constructor(model, view) {
+  constructor() {
     this.weatherCity = document.querySelector('.weather__city');
     this.weatherCountry = document.querySelector('.weather__country');
     this.weatherDate = document.querySelector('.weather__date');
+    this.weatherTemp = document.querySelector('.weather__temp');
+    this.weatherDescription = document.querySelector('.weather__description');
+    this.weatherApparentTemp = document.querySelector('.weather__apparent_temp');
+    this.weatherWindSpeed = document.querySelector('.weather__wind_speed');
+    this.weatherRelativeHumidity = document.querySelector('.weather__relative_humidity');
+    this.weatherThreeDayForecast = document.querySelector('.weather__three-day-forecast');
   }
 
   init() {}
@@ -18,10 +22,33 @@ class View {
     }, 1000);
   }
 
-  locationInfoRender(weatherData) {
-    console.log(weatherData);
-    this.weatherCity.innerText = weatherData.results[0].components.city;
-    this.weatherCountry.innerText = weatherData.results[0].components.country;
+  locationInfoRender(cityInfo) {
+    console.log('cityInfo', cityInfo);
+    const { components } = cityInfo.results[0];
+    this.weatherCity.innerText = components.city;
+    this.weatherCountry.innerText = components.country;
+  }
+
+  dailyForecastRender(weatherData) {
+    console.log('weatherDataRender', weatherData);
+    const param = weatherData.data[0];
+    this.weatherTemp.innerText = Math.ceil(param.temp);
+    this.weatherDescription.innerText = param.weather.description;
+    this.weatherApparentTemp.innerText = Math.ceil(param.app_temp);
+    this.weatherWindSpeed.innerText = Math.ceil(param.wind_spd);
+    this.weatherRelativeHumidity.innerText = Math.ceil(param.rh);
+  }
+
+  threeDayForecastAPIUrl(template, weatherData) {
+    // todo: check is correct data in 3days request
+    // weatherData.data.forEach((data,index) => {
+    // const param = weatherData.data[index];
+    // const { temp } = param;
+    // const { icon } = param.weather;
+
+    //   const card = getCardOfThreeDayForecastTemplate(template,);
+    // });
+    console.log('threeDayForecastAPIUrl', weatherData);
   }
 }
 

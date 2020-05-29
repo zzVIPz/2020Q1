@@ -1,12 +1,18 @@
-export default function getCorrectUrl(url, location, language) {
+export default function getCorrectUrl(url, language, location, additionalLocation) {
   let correctUrl = url;
   console.log(location);
+
+  if (language) {
+    correctUrl = correctUrl.replace(/\{language\}/g, language);
+  }
 
   if (location) {
     correctUrl = correctUrl.replace(/\{location\}/g, location);
   }
-  if (language) {
-    correctUrl = correctUrl.replace(/\{language\}/g, language);
+
+  if (additionalLocation) {
+    correctUrl = correctUrl.replace(/\{additionalLocation\}/g, additionalLocation);
   }
+
   return correctUrl;
 }

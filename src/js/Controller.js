@@ -10,6 +10,8 @@ class Controller {
     this.language = 'en';
     this.temperature = 'C';
     this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
+    this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
+    this.threeDayForecastAPIUrl = this.model.threeDayForecastAPIUrl;
   }
 
   async init() {
@@ -17,13 +19,17 @@ class Controller {
     this.temperature = localStorage.temperature || this.temperature;
     this.addListeners();
     const location = await this.getUserLocation();
-    const weatherData = await this.getWeatherData(location);
-    this.renderTemplate(weatherData);
+    const cityInfo = await this.getCityInfo(location);
+    const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
+    const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
+    this.renderTemplate(cityInfo, dailyForecast, threeDayForecast);
   }
 
-  renderTemplate(weatherData) {
+  renderTemplate(cityInfo, dailyForecast, threeDayForecast) {
     this.view.dateRender();
-    this.view.locationInfoRender(weatherData);
+    this.view.locationInfoRender(cityInfo);
+    this.view.dailyForecastRender(dailyForecast);
+    this.view.threeDayForecastAPIUrl(this.model.threeDayForecastTemplate, threeDayForecast);
   }
 
   addListeners() {
@@ -35,8 +41,17 @@ class Controller {
     return location;
   }
 
-  async getWeatherData(location) {
-    const correctUrl = getCorrectUrl(this.opencagedataAPIUrl, location.loc, this.language);
+  async getCityInfo(location) {
+    const correctUrl = getCorrectUrl(this.opencagedataAPIUrl, this.language, location.loc);
+    const cityInfo = await this.getData(correctUrl);
+    return cityInfo;
+  }
+
+  async getWeatherData(url, location) {
+    const locationValue = location.loc.split(',');
+    const latitude = locationValue[0];
+    const longitude = locationValue[1];
+    const correctUrl = getCorrectUrl(url, this.language, latitude, longitude);
     const weatherData = await this.getData(correctUrl);
     return weatherData;
   }
