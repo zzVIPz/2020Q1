@@ -1,37 +1,61 @@
-import Unsplash from 'unsplash-js';
+import getCorrectUrl from './modules/getCorrectUrl';
 
 class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-    this.imageBackgroundAPIUrl = this.model.imageBackgroundAPIUrl;
     this.btnChangeBackground = document.querySelector('.button-change-background');
     this.image = document.querySelector('.background');
+    this.search = document.querySelector('.search');
+    this.language = 'en';
+    this.temperature = 'C';
+    this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
   }
 
-  init() {
+  async init() {
+    this.language = localStorage.language || this.language;
+    this.temperature = localStorage.temperature || this.temperature;
     this.addListeners();
+    const location = await this.getUserLocation();
+    const weatherData = await this.getWeatherData(location);
+    this.renderTemplate(weatherData);
+  }
+
+  renderTemplate(weatherData) {
+    this.view.dateRender();
+    this.view.locationInfoRender(weatherData);
   }
 
   addListeners() {
     this.addButtonChangeBackgroundClickHandler();
   }
 
+  async getUserLocation() {
+    const location = await this.getData(this.model.geolocationAPIUrl);
+    return location;
+  }
+
+  async getWeatherData(location) {
+    const correctUrl = getCorrectUrl(this.opencagedataAPIUrl, location.loc, this.language);
+    const weatherData = await this.getData(correctUrl);
+    return weatherData;
+  }
+
   addButtonChangeBackgroundClickHandler() {
     this.btnChangeBackground.addEventListener('click', async (e) => {
-      const linkToImage = await this.getLinkToImage();
+      const linkToImage = await this.getData(this.model.imageBackgroundAPIUrl);
       if (linkToImage) {
-        this.changeImage(linkToImage);
+        this.changeImage(linkToImage.urls.regular);
       }
     });
   }
 
-  async getLinkToImage() {
+  async getData(url) {
     try {
-      const url = this.imageBackgroundAPIUrl;
+      //todo: add property for request
       const result = await fetch(url);
       const data = await result.json();
-      return data.urls.regular;
+      return data;
     } catch (err) {
       console.log(this.model.errorMsg, err);
     }
