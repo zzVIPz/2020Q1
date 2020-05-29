@@ -1,3 +1,5 @@
+import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
+
 class View {
   constructor() {
     this.weatherCity = document.querySelector('.weather__city');
@@ -41,13 +43,16 @@ class View {
 
   threeDayForecastAPIUrl(template, weatherData) {
     // todo: check is correct data in 3days request
-    // weatherData.data.forEach((data,index) => {
-    // const param = weatherData.data[index];
-    // const { temp } = param;
-    // const { icon } = param.weather;
-
-    //   const card = getCardOfThreeDayForecastTemplate(template,);
-    // });
+    weatherData.data.forEach((data, index) => {
+      if (index) {
+        const param = weatherData.data[index];
+        const day = param.ts;
+        const { temp } = param;
+        const { icon } = param.weather;
+        const cardTemplate = getCardOfThreeDayForecastTemplate(template, day, temp, icon);
+        this.weatherThreeDayForecast.innerHTML += cardTemplate;
+      }
+    });
     console.log('threeDayForecastAPIUrl', weatherData);
   }
 }
