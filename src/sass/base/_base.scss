@@ -18,18 +18,17 @@ body {
 
 .main {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 1200px;
   min-height: calc(100vh - 93px);
-  margin: 0 auto;
-  padding: 0 25px;
 }
 
-.container {
-  width: 100%;
-  margin: 0 auto;
-}
+// .container {
+//   width: 100%;
+// }
 
 .title {
   margin: 10px;

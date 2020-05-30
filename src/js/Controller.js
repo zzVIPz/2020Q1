@@ -22,10 +22,10 @@ class Controller {
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
-    this.renderTemplate(cityInfo, dailyForecast, threeDayForecast);
+    this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location.loc);
   }
 
-  renderTemplate(cityInfo, dailyForecast, threeDayForecast) {
+  renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
     this.view.dateRender();
     this.view.locationInfoRender(cityInfo);
     this.view.dailyForecastRender(
@@ -34,6 +34,7 @@ class Controller {
       dailyForecast,
     );
     this.view.threeDayForecastAPIUrl(this.model.threeDayForecastTemplate, threeDayForecast);
+    this.view.renderMap(location);
   }
 
   addListeners() {
@@ -76,7 +77,7 @@ class Controller {
       const data = await result.json();
       return data;
     } catch (err) {
-      console.log(this.model.errorMsg, err);
+      console.log('*', this.model.errorMsg, err);
     }
     return null;
   }

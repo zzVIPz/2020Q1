@@ -1,5 +1,6 @@
 import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
 import getImageSrcTemplate from './modules/getImageSrcTemplate';
+import drawMap from './modules/renderMap';
 
 class View {
   constructor() {
@@ -60,6 +61,10 @@ class View {
       }
     });
     console.log('threeDayForecastAPIUrl', weatherData);
+  }
+
+  renderMap(location) {
+    drawMap(location);
   }
 }
 

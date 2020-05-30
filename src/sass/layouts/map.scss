@@ -1,0 +1,22 @@
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  border-radius: 50%;
+}
+
+.map {
+  position: relative;
+
+  width: 500px;
+  min-width: 500px;
+  height: 500px;
+  min-height: 500px;
+
+  .leaflet-left {
+    transform: translate(450px, 210px);
+  }
+}
