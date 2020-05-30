@@ -1,6 +1,7 @@
 import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
 import getImageSrcTemplate from './modules/getImageSrcTemplate';
 import drawMap from './modules/renderMap';
+import getCorrectDate from './modules/getCorrectDate';
 
 class View {
   constructor() {
@@ -18,13 +19,8 @@ class View {
 
   init() {}
 
-  dateRender() {
-    setInterval(() => {
-      //todo: add fn traslete date
-      const date = String(new Date()).split(' ');
-      const formattedDate = `${date[0]} ${date[2]} ${date[1]} ${date[4]}`;
-      this.weatherDate.innerText = formattedDate;
-    }, 1000);
+  dateRender(language) {
+    this.weatherDate.innerText = getCorrectDate(language);
   }
 
   locationInfoRender(cityInfo) {
@@ -50,6 +46,7 @@ class View {
 
   threeDayForecastAPIUrl(template, weatherData) {
     // todo: check is correct data in 3days request
+    this.weatherThreeDayForecast.innerHTML = '';
     weatherData.data.forEach((data, index) => {
       if (index) {
         const param = weatherData.data[index];

@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FancyWeather</title>
-  <!-- <script src='https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css' rel='stylesheet' /> -->
   <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
   <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
 </head>
@@ -15,8 +13,12 @@
   <header class="header">
     <h1 class="title">FancyWeather</h1>
     <div class="control">
-      <button class="button-change-background"></button>
-      <button class="button-choose-language"></button>
+      <button class="button-change-background" title="Change image"></button>
+      <select id="language">
+        <option value="en">EN</option>
+        <option value="ru">RU</option>
+        <option value="be">BY</option>
+      </select>
       <div class="can-toggle">
         <input id="a" type="checkbox">
         <label for="a">

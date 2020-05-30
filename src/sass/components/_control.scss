@@ -15,3 +15,14 @@
 .button-change-background--load {
   background: url(../assets/svg/loader.svg) no-repeat center/30px;
 }
+
+#language {
+  color: white;
+
+  background-color: #171a1bc9;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  @include font($size: 2.7rem, $height: 0rem, $weight: bold);
+}

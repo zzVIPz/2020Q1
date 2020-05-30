@@ -5,10 +5,12 @@ class Controller {
     this.model = model;
     this.view = view;
     this.btnChangeBackground = document.querySelector('.button-change-background');
+    this.selectLanguage = document.querySelector('#language');
     this.image = document.querySelector('.background');
     this.search = document.querySelector('.search');
     this.language = 'en';
     this.temperature = 'C';
+    this.map = false;
     this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
     this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
     this.threeDayForecastAPIUrl = this.model.threeDayForecastAPIUrl;
@@ -17,16 +19,17 @@ class Controller {
   async init() {
     this.language = localStorage.language || this.language;
     this.temperature = localStorage.temperature || this.temperature;
-    this.addListeners();
+    this.selectLanguage.value = this.language;
     const location = await this.getUserLocation();
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location.loc);
+    this.setSetInterval();
+    this.addListeners();
   }
 
   renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
-    this.view.dateRender();
     this.view.locationInfoRender(cityInfo);
     this.view.dailyForecastRender(
       this.model.weatherImageTemplate,
@@ -34,11 +37,22 @@ class Controller {
       dailyForecast,
     );
     this.view.threeDayForecastAPIUrl(this.model.threeDayForecastTemplate, threeDayForecast);
-    this.view.renderMap(location);
+    if (!this.map) {
+      this.view.renderMap(location);
+      this.map = true;
+    }
+  }
+
+  setSetInterval() {
+    this.view.dateRender(this.language);
+    this.timer = setInterval(() => {
+      this.view.dateRender(this.language);
+    }, 1000);
   }
 
   addListeners() {
     this.addButtonChangeBackgroundClickHandler();
+    this.selectLanguageClickHandler();
   }
 
   async getUserLocation() {
@@ -65,8 +79,22 @@ class Controller {
     this.btnChangeBackground.addEventListener('click', async (e) => {
       const linkToImage = await this.getData(this.model.imageBackgroundAPIUrl);
       this.btnChangeBackground.classList.add('button-change-background--load');
+      this.btnChangeBackground.disabled = true;
       if (linkToImage) {
         this.changeImage(linkToImage.urls.regular);
+      }
+    });
+  }
+
+  selectLanguageClickHandler() {
+    this.selectLanguage.addEventListener('click', () => {
+      if (this.selectLanguage.value !== this.language) {
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        this.language = this.selectLanguage.value;
+        localStorage.language = this.language;
+        this.init();
       }
     });
   }
@@ -88,6 +116,7 @@ class Controller {
     this.image.addEventListener('load', () => {
       document.body.append(this.image);
       this.btnChangeBackground.classList.remove('button-change-background--load');
+      this.btnChangeBackground.disabled = false;
     });
   }
 }
