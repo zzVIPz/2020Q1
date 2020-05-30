@@ -25,5 +25,9 @@ export default function getCardOfThreeDayForecastTemplate(template, date, temp, 
     formattedTemplate = formattedTemplate.replace(/\{temperature\}/g, Math.ceil(temp));
   }
 
+  if (icon) {
+    formattedTemplate = formattedTemplate.replace(/\{icon\}/g, icon);
+  }
+
   return formattedTemplate;
 }

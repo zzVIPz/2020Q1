@@ -28,7 +28,11 @@ class Controller {
   renderTemplate(cityInfo, dailyForecast, threeDayForecast) {
     this.view.dateRender();
     this.view.locationInfoRender(cityInfo);
-    this.view.dailyForecastRender(dailyForecast);
+    this.view.dailyForecastRender(
+      this.model.weatherImageTemplate,
+      this.model.weatherDescription[this.language],
+      dailyForecast,
+    );
     this.view.threeDayForecastAPIUrl(this.model.threeDayForecastTemplate, threeDayForecast);
   }
 

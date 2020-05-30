@@ -11,12 +11,20 @@ const MODEL = {
   // opencagedataAPIUrl: `https://api.opencagedata.com/geocode/v1/json?q={location}&language={language}&key=1d94abfb3a1c4cddaf174403a74c55c5&pretty=1&no_annotations=1`,
   opencagedataAPIUrl: `https://api.opencagedata.com/geocode/v1/json?q={location}&language={language}&key=c6b6da0f80f24b299e08ee1075f81aa5&pretty=1&no_annotations=1`,
 
+  weatherDescription: {
+    en: ['FEELS LIKE:', 'WIND:', 'M/S', 'HUMIDITY:'],
+    ru: [''],
+    be: [''],
+  },
+  weatherImageTemplate: `<img class="image" src="https://www.weatherbit.io/static/img/icons/{icon_code}.png">`,
   threeDayForecastTemplate: `
     <div class="weather__card">
       <p class="weather__day">{day}</p>
       <div class="wrapper">
-        <p class="weather__temperature">{temperature}</p>
-        <div class="weather__icon">{icon}</div>
+        <p class="weather__temperature">{temperature}°</p>
+        <div class="weather__icon">
+         <img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/{icon}.png">
+        </div>
       </>
     </div>`,
 };

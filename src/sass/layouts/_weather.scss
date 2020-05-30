@@ -1,0 +1,67 @@
+.weather {
+  color: white;
+  &__location-info {
+    padding: 10px 0;
+  }
+
+  &__city {
+    @include font($size: 4.5rem, $height: 0.1rem, $weight: normal);
+  }
+
+  &__country {
+    @include font($size: 2.5rem, $height: 2.5rem, $weight: bold);
+  }
+
+  &__date {
+    @include font($size: 1.5rem, $height: 0rem, $weight: bold);
+  }
+
+  &__daily-forecast {
+    display: flex;
+    padding: 0 10px;
+  }
+
+  &__image {
+    .image {
+      transform: translate(-10px, 35px);
+    }
+  }
+
+  &__temp {
+    justify-content: center;
+    align-items: center;
+
+    @include font($size: 15rem, $height: 0rem, $weight: bold);
+  }
+
+  &__description_block {
+    padding-left: 30px;
+
+    line-height: 0.5rem;
+  }
+  &__three-day-forecast {
+    display: flex;
+    .wrapper {
+      display: flex;
+    }
+  }
+
+  &__card {
+    padding-right: 15px;
+
+    font-weight: bold;
+  }
+
+  &__temperature {
+    display: flex;
+    align-items: flex-end;
+
+    font-size: 3rem;
+  }
+
+  &__icon {
+    width: 55px;
+
+    transform: translateY(-7px);
+  }
+}

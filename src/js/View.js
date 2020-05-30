@@ -1,10 +1,12 @@
 import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
+import getImageSrcTemplate from './modules/getImageSrcTemplate';
 
 class View {
   constructor() {
     this.weatherCity = document.querySelector('.weather__city');
     this.weatherCountry = document.querySelector('.weather__country');
     this.weatherDate = document.querySelector('.weather__date');
+    this.weatherImage = document.querySelector('.weather__image');
     this.weatherTemp = document.querySelector('.weather__temp');
     this.weatherDescription = document.querySelector('.weather__description');
     this.weatherApparentTemp = document.querySelector('.weather__apparent_temp');
@@ -31,14 +33,18 @@ class View {
     this.weatherCountry.innerText = components.country;
   }
 
-  dailyForecastRender(weatherData) {
+  dailyForecastRender(template, description, weatherData) {
     console.log('weatherDataRender', weatherData);
     const param = weatherData.data[0];
+    const imageSrcTemplate = getImageSrcTemplate(template, param.weather.icon);
+    this.weatherImage.innerHTML = imageSrcTemplate;
     this.weatherTemp.innerText = Math.ceil(param.temp);
-    this.weatherDescription.innerText = param.weather.description;
-    this.weatherApparentTemp.innerText = Math.ceil(param.app_temp);
-    this.weatherWindSpeed.innerText = Math.ceil(param.wind_spd);
-    this.weatherRelativeHumidity.innerText = Math.ceil(param.rh);
+    this.weatherDescription.innerText = param.weather.description.toUpperCase();
+    this.weatherApparentTemp.innerText = `${description[0]} ${Math.ceil(param.app_temp)}°`;
+    this.weatherWindSpeed.innerText = `${description[1]} ${Math.ceil(param.wind_spd)} ${
+      description[2]
+    }`;
+    this.weatherRelativeHumidity.innerText = `${description[3]} ${Math.ceil(param.rh)}%`;
   }
 
   threeDayForecastAPIUrl(template, weatherData) {
