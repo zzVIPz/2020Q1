@@ -64,6 +64,7 @@ class Controller {
   addButtonChangeBackgroundClickHandler() {
     this.btnChangeBackground.addEventListener('click', async (e) => {
       const linkToImage = await this.getData(this.model.imageBackgroundAPIUrl);
+      this.btnChangeBackground.classList.add('button-change-background--load');
       if (linkToImage) {
         this.changeImage(linkToImage.urls.regular);
       }
@@ -86,6 +87,7 @@ class Controller {
     this.image.src = url;
     this.image.addEventListener('load', () => {
       document.body.append(this.image);
+      this.btnChangeBackground.classList.remove('button-change-background--load');
     });
   }
 }

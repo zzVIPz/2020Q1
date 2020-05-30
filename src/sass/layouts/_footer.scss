@@ -8,7 +8,7 @@
   align-items: center;
   height: 47px;
 
-  background-color: $color-menu-train;
+  background-color: $color-menu;
   .contacts {
     position: absolute;
     right: 0;
@@ -19,7 +19,7 @@
       height: 100%;
       padding: 0 20px;
 
-      color: white;
+      color: #ffffff6b;
       text-decoration: none;
 
       img {
@@ -27,9 +27,9 @@
         margin-right: 10px;
       }
       &:hover {
+        color: #ffffff;
+
         cursor: pointer;
-        filter: invert(52%) sepia(75%) saturate(7181%) hue-rotate(199deg) brightness(98%)
-        contrast(104%);
       }
     }
   }

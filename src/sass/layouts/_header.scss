@@ -6,8 +6,9 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  height: 46px;
 
-  background-color: $color-header;
+  background-color: $color-menu;
 
   transition: background-color 0.2s cubic-bezier(0, -1.85, 0.27, 1.75);
 }

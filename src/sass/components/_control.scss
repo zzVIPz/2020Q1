@@ -1,3 +1,17 @@
 .control {
   display: flex;
 }
+
+.button-change-background {
+  width: 50px;
+
+  background: url(../assets/svg/refresh.svg) center/26px no-repeat;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+.button-change-background--load {
+  background: url(../assets/svg/loader.svg) no-repeat center/30px;
+}
