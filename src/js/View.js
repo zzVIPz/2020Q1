@@ -2,6 +2,7 @@ import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForeca
 import getIconSrcTemplate from './modules/getIconSrcTemplate';
 import drawMap from './modules/renderMap';
 import setCorrectDate from './modules/setCorrectDate';
+import getFormattedCoordinates from './modules/getFormattedCoordinates';
 
 class View {
   constructor() {
@@ -15,6 +16,8 @@ class View {
     this.weatherWindSpeed = document.querySelector('.weather__wind_speed');
     this.weatherRelativeHumidity = document.querySelector('.weather__relative_humidity');
     this.weatherThreeDayForecast = document.querySelector('.weather__three-day-forecast');
+    this.latitude = document.querySelector('.geographic__latitude');
+    this.longitude = document.querySelector('.geographic__longitude');
   }
 
   init() {}
@@ -23,11 +26,17 @@ class View {
     this.weatherDate.innerText = setCorrectDate(language, this.weatherDate);
   }
 
-  locationInfoRender(cityInfo) {
+  locationInfoRender(cityInfo, language) {
     console.log('cityInfo', cityInfo);
     const { components } = cityInfo.results[0];
+    const [latitude, longitude] = getFormattedCoordinates(
+      cityInfo.results[0].bounds.northeast,
+      language,
+    );
     this.weatherCity.innerText = components.city;
     this.weatherCountry.innerText = components.country;
+    this.latitude.innerText = latitude;
+    this.longitude.innerText = longitude;
   }
 
   dailyForecastRender(template, description, weatherData) {

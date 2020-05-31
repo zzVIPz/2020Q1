@@ -2,7 +2,6 @@
 
 import getCorrectUrl from './modules/getCorrectUrl';
 import convertTemperature from './modules/convertTemperature';
-import getImageUrl from './modules/getImageUrl';
 
 class Controller {
   constructor(model, view) {
@@ -14,6 +13,7 @@ class Controller {
     this.switch = document.querySelector('.can-toggle__switch');
     this.toggle = document.querySelector('#toggle');
     this.search = document.querySelector('.search');
+    this.location = null;
     this.language = 'en';
     this.temperature = 'c';
     this.map = false;
@@ -26,18 +26,27 @@ class Controller {
     this.language = localStorage.language || this.language;
     this.temperature = localStorage.temperature || this.temperature;
     this.selectLanguage.value = this.language;
-    const location = await this.getUserLocation();
-    const cityInfo = await this.getCityInfo(location);
-    const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
-    const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
-    this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location.loc);
-    this.setSetInterval();
-    this.changeBackgroundImage();
+    this.location = await this.getUserLocation();
+    this.getWeatherInformation();
     this.addListeners();
   }
 
+  async getWeatherInformation() {
+    if (this.location) {
+      const cityInfo = await this.getCityInfo(this.location);
+      const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, this.location);
+      const threeDayForecast = await this.getWeatherData(
+        this.threeDayForecastAPIUrl,
+        this.location,
+      );
+      this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, this.location.loc);
+      this.setSetInterval();
+      // this.changeBackgroundImage();
+    }
+  }
+
   renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
-    this.view.locationInfoRender(cityInfo);
+    this.view.locationInfoRender(cityInfo, this.language);
     this.view.dailyForecastRender(
       this.model.weatherImageTemplate,
       this.model.weatherDescription[this.language],
@@ -100,13 +109,13 @@ class Controller {
   async changeBackgroundImage() {
     const keywords = document.querySelector('.weather__date').dataset.time;
     const formattedImageUrl = this.model.imageBackgroundAPIUrl.replace(/\{keywords\}/g, keywords);
-
-    console.log('string', formattedImageUrl, keywords);
     const linkToImage = await this.getData(formattedImageUrl);
     this.btnChangeBackground.classList.add('button-change-background--load');
     this.btnChangeBackground.disabled = true;
-    if (linkToImage) {
+    if (linkToImage && linkToImage.urls) {
       this.setImage(linkToImage.urls.small);
+    } else {
+      this.setButtonChangeBackgroundDefaultState();
     }
   }
 
@@ -118,7 +127,7 @@ class Controller {
         }
         this.language = this.selectLanguage.value;
         localStorage.language = this.language;
-        this.init();
+        this.getWeatherInformation();
       }
     });
   }
@@ -141,9 +150,13 @@ class Controller {
       //todo: add property for request
       const result = await fetch(url);
       const data = await result.json();
+      console.log('*******', result);
+      console.log('*******', data);
+      if (result.status === 401) throw new Error(data.errors[0]);
       return data;
     } catch (err) {
-      console.log('*', this.model.errorMsg, err);
+      //todo: add show message error
+      console.log('*!!!!!!!!!!!!', this.model.errorMsg, err);
     }
     return null;
   }
@@ -152,9 +165,13 @@ class Controller {
     this.image.src = url;
     this.image.addEventListener('load', () => {
       document.body.append(this.image);
-      this.btnChangeBackground.classList.remove('button-change-background--load');
-      this.btnChangeBackground.disabled = false;
+      this.setButtonChangeBackgroundDefaultState();
     });
+  }
+
+  setButtonChangeBackgroundDefaultState() {
+    this.btnChangeBackground.classList.remove('button-change-background--load');
+    this.btnChangeBackground.disabled = false;
   }
 }
 
