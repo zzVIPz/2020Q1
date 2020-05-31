@@ -1,7 +1,7 @@
 import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
-import getImageSrcTemplate from './modules/getImageSrcTemplate';
+import getIconSrcTemplate from './modules/getIconSrcTemplate';
 import drawMap from './modules/renderMap';
-import getCorrectDate from './modules/getCorrectDate';
+import setCorrectDate from './modules/setCorrectDate';
 
 class View {
   constructor() {
@@ -20,7 +20,7 @@ class View {
   init() {}
 
   dateRender(language) {
-    this.weatherDate.innerText = getCorrectDate(language);
+    this.weatherDate.innerText = setCorrectDate(language, this.weatherDate);
   }
 
   locationInfoRender(cityInfo) {
@@ -35,7 +35,7 @@ class View {
     console.log('weatherDataRender', weatherData);
     const param = weatherData.data[0];
     const spanTag = `<span class="temp-value">{value}</span>`;
-    const imageSrcTemplate = getImageSrcTemplate(template, param.weather.icon);
+    const imageSrcTemplate = getIconSrcTemplate(template, param.weather.icon);
     this.weatherImage.innerHTML = imageSrcTemplate;
     this.weatherTemp.innerHTML = spanTag.replace(/\{value\}/g, Math.ceil(param.temp));
     this.weatherDescription.innerText = param.weather.description.toUpperCase();

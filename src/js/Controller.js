@@ -1,5 +1,8 @@
+//todo: координаты населённого пункта: долгота и широта (в градусах и минутах)
+
 import getCorrectUrl from './modules/getCorrectUrl';
 import convertTemperature from './modules/convertTemperature';
+import getImageUrl from './modules/getImageUrl';
 
 class Controller {
   constructor(model, view) {
@@ -27,9 +30,9 @@ class Controller {
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
-
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location.loc);
     this.setSetInterval();
+    this.changeBackgroundImage();
     this.addListeners();
   }
 
@@ -89,14 +92,22 @@ class Controller {
   }
 
   addButtonChangeBackgroundClickHandler() {
-    this.btnChangeBackground.addEventListener('click', async (e) => {
-      const linkToImage = await this.getData(this.model.imageBackgroundAPIUrl);
-      this.btnChangeBackground.classList.add('button-change-background--load');
-      this.btnChangeBackground.disabled = true;
-      if (linkToImage) {
-        this.changeImage(linkToImage.urls.regular);
-      }
+    this.btnChangeBackground.addEventListener('click', () => {
+      this.changeBackgroundImage();
     });
+  }
+
+  async changeBackgroundImage() {
+    const keywords = document.querySelector('.weather__date').dataset.time;
+    const formattedImageUrl = this.model.imageBackgroundAPIUrl.replace(/\{keywords\}/g, keywords);
+
+    console.log('string', formattedImageUrl, keywords);
+    const linkToImage = await this.getData(formattedImageUrl);
+    this.btnChangeBackground.classList.add('button-change-background--load');
+    this.btnChangeBackground.disabled = true;
+    if (linkToImage) {
+      this.setImage(linkToImage.urls.small);
+    }
   }
 
   selectLanguageClickHandler() {
@@ -137,7 +148,7 @@ class Controller {
     return null;
   }
 
-  changeImage(url) {
+  setImage(url) {
     this.image.src = url;
     this.image.addEventListener('load', () => {
       document.body.append(this.image);
