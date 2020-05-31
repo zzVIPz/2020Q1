@@ -1,4 +1,5 @@
 import getCorrectUrl from './modules/getCorrectUrl';
+import convertTemperature from './modules/convertTemperature';
 
 class Controller {
   constructor(model, view) {
@@ -7,9 +8,11 @@ class Controller {
     this.btnChangeBackground = document.querySelector('.button-change-background');
     this.selectLanguage = document.querySelector('#language');
     this.image = document.querySelector('.background');
+    this.switch = document.querySelector('.can-toggle__switch');
+    this.toggle = document.querySelector('#toggle');
     this.search = document.querySelector('.search');
     this.language = 'en';
-    this.temperature = 'C';
+    this.temperature = 'c';
     this.map = false;
     this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
     this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
@@ -24,6 +27,7 @@ class Controller {
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
+
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location.loc);
     this.setSetInterval();
     this.addListeners();
@@ -36,7 +40,15 @@ class Controller {
       this.model.weatherDescription[this.language],
       dailyForecast,
     );
-    this.view.threeDayForecastAPIUrl(this.model.threeDayForecastTemplate, threeDayForecast);
+    this.view.threeDayForecastRender(
+      this.model.threeDayForecastTemplate,
+      threeDayForecast,
+      this.language,
+    );
+    if (this.temperature === 'f') {
+      this.toggle.checked = true;
+      this.callConvertTemperature();
+    }
     if (!this.map) {
       this.view.renderMap(location);
       this.map = true;
@@ -53,6 +65,7 @@ class Controller {
   addListeners() {
     this.addButtonChangeBackgroundClickHandler();
     this.selectLanguageClickHandler();
+    this.toggleClickHandler();
   }
 
   async getUserLocation() {
@@ -97,6 +110,19 @@ class Controller {
         this.init();
       }
     });
+  }
+
+  toggleClickHandler() {
+    this.switch.addEventListener('click', () => {
+      this.temperature = this.temperature === 'c' ? 'f' : 'c';
+      localStorage.temperature = this.temperature;
+      this.callConvertTemperature();
+    });
+  }
+
+  callConvertTemperature() {
+    const temperatureNodes = document.querySelectorAll('.temp-value');
+    convertTemperature(this.temperature, temperatureNodes);
   }
 
   async getData(url) {

@@ -31,20 +31,26 @@ class View {
   }
 
   dailyForecastRender(template, description, weatherData) {
+    //todo: need refartor - get forrmated string
     console.log('weatherDataRender', weatherData);
     const param = weatherData.data[0];
+    const spanTag = `<span class="temp-value">{value}</span>`;
     const imageSrcTemplate = getImageSrcTemplate(template, param.weather.icon);
     this.weatherImage.innerHTML = imageSrcTemplate;
-    this.weatherTemp.innerText = Math.ceil(param.temp);
+    this.weatherTemp.innerHTML = spanTag.replace(/\{value\}/g, Math.ceil(param.temp));
     this.weatherDescription.innerText = param.weather.description.toUpperCase();
-    this.weatherApparentTemp.innerText = `${description[0]} ${Math.ceil(param.app_temp)}°`;
+    this.weatherApparentTemp.innerHTML = `${description[0]} ${spanTag.replace(
+      /\{value\}/g,
+      Math.ceil(param.app_temp),
+    )}°`;
     this.weatherWindSpeed.innerText = `${description[1]} ${Math.ceil(param.wind_spd)} ${
       description[2]
     }`;
+
     this.weatherRelativeHumidity.innerText = `${description[3]} ${Math.ceil(param.rh)}%`;
   }
 
-  threeDayForecastAPIUrl(template, weatherData) {
+  threeDayForecastRender(template, weatherData, language) {
     // todo: check is correct data in 3days request
     this.weatherThreeDayForecast.innerHTML = '';
     weatherData.data.forEach((data, index) => {
@@ -53,7 +59,7 @@ class View {
         const day = param.ts;
         const { temp } = param;
         const { icon } = param.weather;
-        const cardTemplate = getCardOfThreeDayForecastTemplate(template, day, temp, icon);
+        const cardTemplate = getCardOfThreeDayForecastTemplate(template, day, temp, icon, language);
         this.weatherThreeDayForecast.innerHTML += cardTemplate;
       }
     });

@@ -1,6 +1,6 @@
 @mixin can-toggle-branding(
   $can-toggle-off-color: #777777,
-  $can-toggle-on-color: #5fc054,
+  $can-toggle-on-color: #777777,
   $can-toggle-inactive-text: rgba(white, 0.5),
   $can-toggle-transition: cubic-bezier(0, 1, 0.5, 1)
 ) {
@@ -52,6 +52,7 @@
   label {
     .can-toggle__switch {
       background: lighten($can-toggle-off-color, 5%);
+      cursor: pointer;
 
       transition: background-color 0.3s $can-toggle-transition;
       &:before {
