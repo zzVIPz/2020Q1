@@ -19,16 +19,14 @@ body {
 .main {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   max-width: 1200px;
   min-height: calc(100vh - 93px);
+  margin: 0 auto;
+  padding-bottom: 25px;
 }
-
-// .container {
-//   width: 100%;
-// }
 
 .title {
   margin: 10px;
@@ -38,7 +36,8 @@ body {
 }
 
 .background {
-  position: absolute;
+  position: fixed;
+  top: 0;
   z-index: -1;
 
   width: 100%;
@@ -47,4 +46,8 @@ body {
   filter: contrast(60%) brightness(65%);
 
   object-fit: cover;
+}
+
+.wrapper {
+  display: flex;
 }

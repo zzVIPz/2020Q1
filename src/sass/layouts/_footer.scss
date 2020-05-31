@@ -9,6 +9,15 @@
   height: 47px;
 
   background-color: $color-menu;
+
+  .wrapper {
+    position: relative;
+
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+
   .contacts {
     position: absolute;
     right: 0;
@@ -34,12 +43,12 @@
     }
   }
 }
-@media (max-width: 550px) {
+@media (max-width: 750px) {
   .contacts {
     display: none;
   }
 
   .search-tool .search {
-    width: 65%;
+    width: 70%;
   }
 }

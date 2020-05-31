@@ -1,14 +1,30 @@
 .header {
   position: sticky;
-  top: 0;
   z-index: 1;
 
   display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  justify-content: center;
   height: 46px;
 
   background-color: $color-menu;
 
   transition: background-color 0.2s cubic-bezier(0, -1.85, 0.27, 1.75);
+
+  .title {
+    padding-left: 15px;
+  }
+
+  .wrapper {
+    position: relative;
+
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 620px) {
+  .title {
+    display: none;
+  }
 }
