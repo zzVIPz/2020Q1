@@ -3,9 +3,11 @@ import getIconSrcTemplate from './modules/getIconSrcTemplate';
 import drawMap from './modules/renderMap';
 import setCorrectDate from './modules/setCorrectDate';
 import getFormattedCoordinates from './modules/getFormattedCoordinates';
+import getPlaceholderValue from './modules/getPlaceholderValue';
 
 class View {
   constructor() {
+    this.search = document.querySelector('.search');
     this.weatherCity = document.querySelector('.weather__city');
     this.weatherCountry = document.querySelector('.weather__country');
     this.weatherDate = document.querySelector('.weather__date');
@@ -20,7 +22,10 @@ class View {
     this.longitude = document.querySelector('.geographic__longitude');
   }
 
-  init() {}
+  init(language) {
+    const placeholderValue = getPlaceholderValue(language);
+    this.search.setAttribute('placeholder', placeholderValue);
+  }
 
   dateRender(language, timezone) {
     this.weatherDate.innerText = setCorrectDate(language, this.weatherDate, timezone);

@@ -50,6 +50,7 @@ class Controller {
   }
 
   renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
+    this.view.init(this.language);
     this.view.locationInfoRender(cityInfo, this.language);
     this.view.dailyForecastRender(
       this.model.weatherImageTemplate,
@@ -65,10 +66,10 @@ class Controller {
       this.toggle.checked = true;
       this.callConvertTemperature();
     }
-    if (!this.map) {
-      this.view.renderMap(location);
-      this.map = true;
-    }
+    // if (!this.map) {
+    this.view.renderMap(location);
+    //   this.map = true;
+    // }
   }
 
   setSetInterval(timezone) {
