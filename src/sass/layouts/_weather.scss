@@ -3,6 +3,18 @@
 
   color: white;
 
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+
+    &--disabled {
+      display: none;
+    }
+  }
+
   &__location-info {
     padding: 10px 0;
   }

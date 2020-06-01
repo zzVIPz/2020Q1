@@ -31,37 +31,39 @@
 
   </header>
   <main class="main">
-    <div class="weather container">
-      <div class="weather__location-info">
-        <p class="weather__city"></p>
-        <p class="weather__country"></p>
-      </div>
-      <div class="weather__date-info">
-        <p class="weather__date"></p>
-      </div>
-      <div class="weather__daily-forecast">
-        <p class="weather__temp"></p>
+    <div class="weather__container weather__container--disabled">
+      <div class="weather">
+        <div class="weather__location-info">
+          <p class="weather__city"></p>
+          <p class="weather__country"></p>
+        </div>
+        <div class="weather__date-info">
+          <p class="weather__date"></p>
+        </div>
+        <div class="weather__daily-forecast">
+          <p class="weather__temp"></p>
 
-        <div class="container">
-          <div class="weather__image"></div>
-          <div class="weather__description_block">
-            <p class="weather__description"></p>
-            <p class="weather__apparent_temp"></p>
-            <p class="weather__wind_speed"></p>
-            <p class="weather__relative_humidity"></p>
+          <div class="container">
+            <div class="weather__image"></div>
+            <div class="weather__description_block">
+              <p class="weather__description"></p>
+              <p class="weather__apparent_temp"></p>
+              <p class="weather__wind_speed"></p>
+              <p class="weather__relative_humidity"></p>
+            </div>
           </div>
         </div>
+        <div class="weather__three-day-forecast"></div>
       </div>
-      <div class="weather__three-day-forecast"></div>
-    </div>
-    <div class="geographic">
-      <div class="map">
-        <div id="map"></div>
+      <div class="geographic">
+        <div class="map">
+          <div id="map"></div>
+        </div>
+        <p class="geographic__latitude"></p>
+        <p class="geographic__longitude"></p>
       </div>
-      <p class="geographic__latitude"></p>
-      <p class="geographic__longitude"></p>
     </div>
-
+    <div class="loader-container"></div>
   </main>
   <footer class="footer">
     <div class="wrapper">
@@ -76,9 +78,7 @@
           zzVIPz
         </a>
       </div>
-
     </div>
-
   </footer>
   <img class="background" src="./src/assets/images/sky.jpg">
 </body>

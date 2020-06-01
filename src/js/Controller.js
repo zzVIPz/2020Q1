@@ -13,12 +13,15 @@ class Controller {
     this.switch = document.querySelector('.can-toggle__switch');
     this.toggle = document.querySelector('#toggle');
     this.search = document.querySelector('.search');
+    this.controlTool = document.querySelector('.control');
+    this.searchTool = document.querySelector('.search-tool');
     this.buttonSearch = document.querySelector('.button__search');
     this.buttonClear = document.querySelector('.button__clear');
+    this.loader = document.querySelector('.loader-container');
+    this.weatherContainer = document.querySelector('.weather__container');
     this.location = null;
     this.language = 'en';
     this.temperature = 'c';
-    this.map = false;
     this.geolocationAPIUrl = this.model.geolocationAPIUrl;
     this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
     this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
@@ -29,6 +32,7 @@ class Controller {
     this.language = localStorage.language || this.language;
     this.temperature = localStorage.temperature || this.temperature;
     this.selectLanguage.value = this.language;
+    this.view.init(this.model.loader);
     const location = await this.getUserLocation();
     if (location) {
       this.location = location.loc;
@@ -44,13 +48,29 @@ class Controller {
     console.log('cityInfo', cityInfo);
     console.log('dailyForecast', dailyForecast);
     console.log('threeDayForecast', threeDayForecast);
+    // this.changeBackgroundImage();
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location);
     this.setSetInterval(threeDayForecast.timezone);
-    // this.changeBackgroundImage();
+    this.toggleLoaderDisplay(false);
+    this.view.renderMap(location);
+  }
+
+  toggleLoaderDisplay(mode) {
+    if (mode) {
+      this.loader.classList.remove('loader--disabled');
+      this.weatherContainer.classList.add('weather__container--disabled');
+      this.searchTool.classList.remove('search-tool--active');
+      this.controlTool.classList.remove('control--active');
+    } else {
+      this.loader.classList.add('loader--disabled');
+      this.weatherContainer.classList.remove('weather__container--disabled');
+      this.searchTool.classList.add('search-tool--active');
+      this.controlTool.classList.add('control--active');
+    }
   }
 
   renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
-    this.view.init(this.language);
+    this.view.setPlaceholderValue(this.language);
     this.view.locationInfoRender(cityInfo, this.language);
     this.view.dailyForecastRender(
       this.model.weatherImageTemplate,
@@ -66,10 +86,6 @@ class Controller {
       this.toggle.checked = true;
       this.callConvertTemperature();
     }
-    // if (!this.map) {
-    this.view.renderMap(location);
-    //   this.map = true;
-    // }
   }
 
   setSetInterval(timezone) {
@@ -131,6 +147,7 @@ class Controller {
     if (this.search.value) {
       const cityInfo = await this.getCityInfo(this.search.value);
       if (cityInfo.results.length) {
+        this.toggleLoaderDisplay(true);
         this.clearTimer();
         const coordinates = cityInfo.results[0].geometry;
         this.location = `${coordinates.lat},${coordinates.lng}`;
@@ -169,6 +186,7 @@ class Controller {
         this.language = this.selectLanguage.value;
         localStorage.language = this.language;
         this.getWeatherInformation(this.location);
+        this.toggleLoaderDisplay(true);
       }
     });
   }

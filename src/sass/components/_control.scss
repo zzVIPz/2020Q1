@@ -2,7 +2,11 @@
   position: absolute;
   right: 155px;
 
-  display: flex;
+  display: none;
+
+  &--active {
+    display: flex;
+  }
 }
 
 .button-change-background {

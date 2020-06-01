@@ -9,8 +9,17 @@ body {
   justify-content: center;
   min-height: 100vh;
 
-  background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
+  background-image: linear-gradient(
+  to top,
+  lightgrey 0%,
+  lightgrey 1%,
+  #e0e0e0 26%,
+  #efefef 48%,
+  #d9d9d9 75%,
+  #bcbcbc 100%
+  );
   background-size: cover;
+  background-blend-mode: multiply, multiply;
 
   @extend %font-prim;
   @include font($size: 1.6rem, $height: 0rem, $weight: normal);

@@ -4,9 +4,11 @@ import drawMap from './modules/renderMap';
 import setCorrectDate from './modules/setCorrectDate';
 import getFormattedCoordinates from './modules/getFormattedCoordinates';
 import getPlaceholderValue from './modules/getPlaceholderValue';
+import checkDate from './modules/checkDate';
 
 class View {
   constructor() {
+    this.loaderContainer = document.querySelector('.loader-container');
     this.search = document.querySelector('.search');
     this.weatherCity = document.querySelector('.weather__city');
     this.weatherCountry = document.querySelector('.weather__country');
@@ -22,7 +24,11 @@ class View {
     this.longitude = document.querySelector('.geographic__longitude');
   }
 
-  init(language) {
+  init(loader) {
+    this.loaderContainer.innerHTML = loader;
+  }
+
+  setPlaceholderValue(language) {
     const placeholderValue = getPlaceholderValue(language);
     this.search.setAttribute('placeholder', placeholderValue);
   }
@@ -38,7 +44,7 @@ class View {
       cityInfo.results[0].bounds.northeast,
       language,
     );
-    this.weatherCity.innerText = components.state || components.city || components.town;
+    this.weatherCity.innerText = components.town || components.state || components.city;
     this.weatherCountry.innerText = components.country;
     this.latitude.innerText = latitude;
     this.longitude.innerText = longitude;
@@ -65,19 +71,26 @@ class View {
   }
 
   threeDayForecastRender(template, weatherData, language) {
-    // todo: check is correct data in 3days request
     this.weatherThreeDayForecast.innerHTML = '';
+    let counter = 0;
+    console.log('threeDayForecastAPIUrl', weatherData);
     weatherData.data.forEach((data, index) => {
-      if (index) {
+      if (index && checkDate(weatherData.timezone, data) && counter < 3) {
+        counter += 1;
         const param = weatherData.data[index];
-        const day = param.ts;
+        const date = param.datetime.split('-');
         const { temp } = param;
         const { icon } = param.weather;
-        const cardTemplate = getCardOfThreeDayForecastTemplate(template, day, temp, icon, language);
+        const cardTemplate = getCardOfThreeDayForecastTemplate(
+          template,
+          date,
+          temp,
+          icon,
+          language,
+        );
         this.weatherThreeDayForecast.innerHTML += cardTemplate;
       }
     });
-    console.log('threeDayForecastAPIUrl', weatherData);
   }
 
   renderMap(location) {

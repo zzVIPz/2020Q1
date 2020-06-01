@@ -5,7 +5,10 @@ const DAYS_OF_THE_WEEK = {
 };
 
 function getWeekDay(date, language) {
-  const formattedDate = new Date(date * 1e3);
+  const dateTmp = date;
+  dateTmp[1] -= 1;
+  const formattedDate = new Date(...dateTmp);
+  console.log('getWeekDay', formattedDate, formattedDate.getDay());
   const day = DAYS_OF_THE_WEEK[language][formattedDate.getDay()];
   return day;
 }
