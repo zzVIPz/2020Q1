@@ -34,10 +34,12 @@
 }
 
 @media (max-width: 571px) {
-  .map {
-    width: 300px;
-    min-width: 300px;
-    height: 300px;
-    min-height: 300px;
+  .geographic {
+    .map {
+      width: 300px;
+      min-width: 300px;
+      height: 300px;
+      min-height: 300px;
+    }
   }
 }

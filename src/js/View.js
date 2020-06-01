@@ -22,18 +22,18 @@ class View {
 
   init() {}
 
-  dateRender(language) {
-    this.weatherDate.innerText = setCorrectDate(language, this.weatherDate);
+  dateRender(language, timezone) {
+    this.weatherDate.innerText = setCorrectDate(language, this.weatherDate, timezone);
   }
 
   locationInfoRender(cityInfo, language) {
-    console.log('cityInfo', cityInfo);
+    console.log('cityInfoDraw', cityInfo);
     const { components } = cityInfo.results[0];
     const [latitude, longitude] = getFormattedCoordinates(
       cityInfo.results[0].bounds.northeast,
       language,
     );
-    this.weatherCity.innerText = components.city;
+    this.weatherCity.innerText = components.state || components.city || components.town;
     this.weatherCountry.innerText = components.country;
     this.latitude.innerText = latitude;
     this.longitude.innerText = longitude;

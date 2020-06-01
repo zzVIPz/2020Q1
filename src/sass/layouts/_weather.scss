@@ -26,9 +26,7 @@
   }
 
   &__image {
-    .image {
-      transform: translate(-10px, 15px);
-    }
+    transform: translateX(-20px);
   }
 
   &__temp {
@@ -76,6 +74,14 @@
   }
 }
 
+@media (max-width: 1071px) {
+  .weather {
+    &__three-day-forecast {
+      justify-content: center;
+    }
+  }
+}
+
 @media (max-width: 571px) {
   .weather {
     &__daily-forecast {
@@ -83,7 +89,7 @@
     }
 
     &__temp {
-      margin: 150px 0 -10px;
+      margin: 105px 0 70px;
     }
 
     &__three-day-forecast {
@@ -91,8 +97,15 @@
       padding-top: 30px;
     }
 
-    &__image .image {
-      transform: translate(155px, -165px);
+    &__image {
+      padding-left: 125px;
+
+      transform: none;
+      .image {
+        width: 80px;
+
+        transform: translateY(20px);
+      }
     }
   }
 }
