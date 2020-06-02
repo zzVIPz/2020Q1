@@ -24,6 +24,21 @@
   background: url(../assets/svg/loader.svg) no-repeat center/30px;
 }
 
+.button-speaker {
+  width: 50px;
+  margin-right: 10px;
+
+  background: url(../assets/svg/speaker.svg) center/31px no-repeat;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+.button-speaker--active {
+  background: url(../assets/svg/speaker-active.svg) center/31px no-repeat;
+}
+
 #language {
   margin-right: 20px;
 

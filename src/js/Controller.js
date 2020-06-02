@@ -1,5 +1,9 @@
+/* global SpeechRecognition */
+/* eslint-disable no-undef */
+
 import getCorrectUrl from './modules/getCorrectUrl';
 import convertTemperature from './modules/convertTemperature';
+import getMessage from './modules/getMessage';
 
 class Controller {
   constructor(model, view) {
@@ -19,11 +23,13 @@ class Controller {
     this.searchTool = document.querySelector('.search-tool');
     this.buttonSearch = document.querySelector('.button__search');
     this.buttonClear = document.querySelector('.button__clear');
+    this.buttonSpeaker = document.querySelector('.button-speaker');
     this.loader = document.querySelector('.loader-container');
     this.weatherContainer = document.querySelector('.weather__container');
     this.microphone = document.querySelector('.button__microphone');
     this.location = null;
-    this.state = false;
+    this.microphoneState = false;
+    this.speakerState = false;
     this.language = 'en';
     this.temperature = 'c';
   }
@@ -42,7 +48,7 @@ class Controller {
   }
 
   async getWeatherInformation(location) {
-    this.state = false;
+    this.microphoneState = false;
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
@@ -104,6 +110,7 @@ class Controller {
     this.addButtonClearClickHandler();
     this.addButtonEnterClickHandler();
     this.addButtonMicrophoneClickHandler();
+    this.addButtonSpeakerClickHandler();
   }
 
   async getUserLocation() {
@@ -147,15 +154,48 @@ class Controller {
 
   addButtonMicrophoneClickHandler() {
     this.microphone.addEventListener('click', () => {
-      this.microphone.classList.add('button__microphone--active');
-      this.state = !this.state;
-      if (this.state) {
+      this.microphoneState = !this.microphoneState;
+      if (this.microphoneState) {
+        this.microphone.classList.add('button__microphone--active');
         this.recordSpeech();
       } else {
         this.recognition.abort();
         this.microphone.classList.remove('button__microphone--active');
       }
     });
+  }
+
+  addButtonSpeakerClickHandler() {
+    this.buttonSpeaker.addEventListener('click', () => {
+      this.buttonSpeaker.classList.toggle('button-speaker--active');
+      this.speakerState = !this.speakerState;
+      if (this.speakerState) {
+        this.listenToWetherForecast();
+      } else {
+        speechSynthesis.cancel();
+        this.speakerState = !this.speakerState;
+      }
+    });
+  }
+
+  listenToWetherForecast() {
+    const message = new SpeechSynthesisUtterance();
+    message.lang = this.language;
+    message.addEventListener('end', () => {
+      this.speakerState = !this.speakerState;
+      this.buttonSpeaker.classList.remove('button-speaker--active');
+    });
+    message.text = getMessage(
+      this.language,
+      document.querySelector('.weather__city').innerText,
+      document.querySelector('.weather__country').innerText,
+      document.querySelector('.temp-value').innerText,
+      document.querySelector('.weather__description').innerText,
+      document.querySelector('.weather__apparent_temp').innerText,
+      document.querySelector('.weather__wind_speed').innerText,
+      document.querySelector('.weather__relative_humidity').innerText,
+    );
+    speechSynthesis.speak(message);
   }
 
   recordSpeech() {
@@ -178,6 +218,12 @@ class Controller {
           this.getData();
         }, 2000);
       }
+    });
+
+    this.recognition.addEventListener('end', () => {
+      console.log('listener---end');
+      this.microphoneState = false;
+      this.microphone.classList.remove('button__microphone--active');
     });
     this.recognition.start();
   }
@@ -229,6 +275,7 @@ class Controller {
         this.clearTimer();
         this.language = this.selectLanguage.value;
         localStorage.language = this.language;
+        speechSynthesis.cancel();
         this.getWeatherInformation(this.location);
         this.toggleLoaderDisplay(true);
       }
