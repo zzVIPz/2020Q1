@@ -1,4 +1,4 @@
-const TRANSLETE = {
+const TRANSLATE = {
   ru: ['ШИРОТА', 'ДОЛГОТА'],
   en: ['LATITUDE', 'LONGITUDE'],
   be: ['ШЫРАТА', 'ДАЎГАТА'],
@@ -14,7 +14,7 @@ function getCoordinatesStr(coordinate) {
 }
 
 export default function getFormattedCoordinates(cityInfo, language) {
-  const latitude = `${TRANSLETE[language][0]}: ${getCoordinatesStr(cityInfo.lat)}`;
-  const longitude = `${TRANSLETE[language][1]}: ${getCoordinatesStr(cityInfo.lng)}`;
+  const latitude = `${TRANSLATE[language][0]}: ${getCoordinatesStr(cityInfo.lat)}`;
+  const longitude = `${TRANSLATE[language][1]}: ${getCoordinatesStr(cityInfo.lng)}`;
   return [latitude, longitude];
 }

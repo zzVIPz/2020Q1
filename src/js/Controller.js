@@ -1,5 +1,3 @@
-//todo: координаты населённого пункта: долгота и широта (в градусах и минутах)
-
 import getCorrectUrl from './modules/getCorrectUrl';
 import convertTemperature from './modules/convertTemperature';
 
@@ -7,6 +5,10 @@ class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
+    this.geolocationAPIUrl = this.model.geolocationAPIUrl;
+    this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
+    this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
+    this.threeDayForecastAPIUrl = this.model.threeDayForecastAPIUrl;
     this.btnChangeBackground = document.querySelector('.button-change-background');
     this.selectLanguage = document.querySelector('#language');
     this.image = document.querySelector('.background');
@@ -19,13 +21,11 @@ class Controller {
     this.buttonClear = document.querySelector('.button__clear');
     this.loader = document.querySelector('.loader-container');
     this.weatherContainer = document.querySelector('.weather__container');
+    this.microphone = document.querySelector('.button__microphone');
     this.location = null;
+    this.state = false;
     this.language = 'en';
     this.temperature = 'c';
-    this.geolocationAPIUrl = this.model.geolocationAPIUrl;
-    this.opencagedataAPIUrl = this.model.opencagedataAPIUrl;
-    this.dailyForecastAPIUrl = this.model.dailyForecastAPIUrl;
-    this.threeDayForecastAPIUrl = this.model.threeDayForecastAPIUrl;
   }
 
   async init() {
@@ -42,15 +42,16 @@ class Controller {
   }
 
   async getWeatherInformation(location) {
+    this.state = false;
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
     console.log('cityInfo', cityInfo);
     console.log('dailyForecast', dailyForecast);
     console.log('threeDayForecast', threeDayForecast);
-    // this.changeBackgroundImage();
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location);
     this.setSetInterval(threeDayForecast.timezone);
+    // await this.changeBackgroundImage();
     this.toggleLoaderDisplay(false);
     this.view.renderMap(location);
   }
@@ -69,7 +70,7 @@ class Controller {
     }
   }
 
-  renderTemplate(cityInfo, dailyForecast, threeDayForecast, location) {
+  renderTemplate(cityInfo, dailyForecast, threeDayForecast) {
     this.view.setPlaceholderValue(this.language);
     this.view.locationInfoRender(cityInfo, this.language);
     this.view.dailyForecastRender(
@@ -102,6 +103,7 @@ class Controller {
     this.addButtonSearchClickHandler();
     this.addButtonClearClickHandler();
     this.addButtonEnterClickHandler();
+    this.addButtonMicrophoneClickHandler();
   }
 
   async getUserLocation() {
@@ -143,6 +145,43 @@ class Controller {
     });
   }
 
+  addButtonMicrophoneClickHandler() {
+    this.microphone.addEventListener('click', () => {
+      this.microphone.classList.add('button__microphone--active');
+      this.state = !this.state;
+      if (this.state) {
+        this.recordSpeech();
+      } else {
+        this.recognition.abort();
+        this.microphone.classList.remove('button__microphone--active');
+      }
+    });
+  }
+
+  recordSpeech() {
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.search.value = '';
+    let requestCounter = 0;
+    this.recognition = new SpeechRecognition();
+    this.recognition.interimResults = true;
+    this.recognition.lang = this.language;
+    this.recognition.addEventListener('result', (e) => {
+      const transcription = Array.from(e.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join('');
+      this.search.value = transcription;
+      if (!requestCounter) {
+        requestCounter += 1;
+        setTimeout(() => {
+          this.microphone.classList.remove('button__microphone--active');
+          this.getData();
+        }, 2000);
+      }
+    });
+    this.recognition.start();
+  }
+
   async getData() {
     if (this.search.value) {
       const cityInfo = await this.getCityInfo(this.search.value);
@@ -169,6 +208,11 @@ class Controller {
   async changeBackgroundImage() {
     const keywords = document.querySelector('.weather__date').dataset.time;
     const formattedImageUrl = this.model.imageBackgroundAPIUrl.replace(/\{keywords\}/g, keywords);
+    console.log('**********');
+    console.log('You can see the image request information below');
+    console.log('**********');
+    console.log(formattedImageUrl);
+    console.log('**********');
     const linkToImage = await this.fetchAsync(formattedImageUrl);
     this.btnChangeBackground.classList.add('button-change-background--load');
     this.btnChangeBackground.disabled = true;

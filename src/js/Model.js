@@ -1,7 +1,7 @@
 const MODEL = {
   errorMsg: 'Unfortunately, an error occurred on the API side. Try again, please!',
   imageBackgroundAPIUrl:
-    'https://api.unsplash.com/photos/random?query=nature,sky,{keywords}&client_id=jevIz2yqJ8V1u2sS0HIqHs0SnCgCsrKavmqTcR1Av6s',
+    'https://api.unsplash.com/photos/random?query={keywords},nature,sky,landscape&client_id=jevIz2yqJ8V1u2sS0HIqHs0SnCgCsrKavmqTcR1Av6s',
   // geolocationAPIUrl: 'https://ipinfo.io/json?token=c2e6ca672c9bef', мой
   geolocationAPIUrl: 'https://ipinfo.io/json?token=eb5b90bb77d46a',
   // openWeatherMapAPIUrl: `https://api.openweathermap.org/data/2.5/forecast?q=MIORY, BELARUS&lang=[en,ru,by]&units=metric&APPID=0bf8348d5aae47b1557879b3282e99e8`,

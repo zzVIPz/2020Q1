@@ -38,13 +38,9 @@ class View {
   }
 
   locationInfoRender(cityInfo, language) {
-    console.log('cityInfoDraw', cityInfo);
     const { components } = cityInfo.results[0];
-    const [latitude, longitude] = getFormattedCoordinates(
-      cityInfo.results[0].bounds.northeast,
-      language,
-    );
-    this.weatherCity.innerText = components.town || components.state || components.city;
+    const [latitude, longitude] = getFormattedCoordinates(cityInfo.results[0].geometry, language);
+    this.weatherCity.innerText = components.town || components.city || components.state;
     this.weatherCountry.innerText = components.country;
     this.latitude.innerText = latitude;
     this.longitude.innerText = longitude;
@@ -52,7 +48,6 @@ class View {
 
   dailyForecastRender(template, description, weatherData) {
     //todo: need refartor - get forrmated string
-    console.log('weatherDataRender', weatherData);
     const param = weatherData.data[0];
     const spanTag = `<span class="temp-value">{value}</span>`;
     const imageSrcTemplate = getIconSrcTemplate(template, param.weather.icon);
@@ -73,7 +68,6 @@ class View {
   threeDayForecastRender(template, weatherData, language) {
     this.weatherThreeDayForecast.innerHTML = '';
     let counter = 0;
-    console.log('threeDayForecastAPIUrl', weatherData);
     weatherData.data.forEach((data, index) => {
       if (index && checkDate(weatherData.timezone, data) && counter < 3) {
         counter += 1;

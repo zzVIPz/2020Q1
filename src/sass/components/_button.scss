@@ -7,6 +7,16 @@
   border-left: 0;
   outline: none;
 
+  &__microphone {
+    background: url("../assets/svg/mute.svg") center/18px no-repeat #ffffff;
+
+    transition: all 0.5s;
+  }
+
+  &__microphone--active {
+    background: url("../assets/svg/microphone.svg") center/18px no-repeat #ffffff;
+  }
+
   &__clear {
     background: url("../assets/svg/clear.svg") center/18px no-repeat #ffffff;
   }
