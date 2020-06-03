@@ -20,7 +20,7 @@
   }
 
   &__city {
-    @include font($size: 4.5rem, $height: 0.1rem, $weight: normal);
+    @include font($size: 4.5rem, $height: 2rem, $weight: normal);
   }
 
   &__country {
@@ -28,7 +28,7 @@
   }
 
   &__date {
-    @include font($size: 1.5rem, $height: 0rem, $weight: bold);
+    @include font($size: 1.5rem, $height: 2rem, $weight: bold);
   }
 
   &__daily-forecast {
@@ -38,25 +38,41 @@
   }
 
   &__image {
-    transform: translateX(-20px);
+    position: relative;
+
+    transform: translateX(-25px);
+
+    animation-name: image-animation;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes image-animation {
+    from {
+      transform: scale(1, 1);
+      filter: contrast(100%);
+    }
+
+    to {
+      transform: scale(0.9, 0.9);
+      filter: contrast(200%);
+      filter: blur(1px);
+    }
   }
 
   &__temp {
     justify-content: center;
     align-items: center;
 
-    @include font($size: 17rem, $height: 0rem, $weight: bold);
+    @include font($size: 17rem, $height: 2rem, $weight: bold);
   }
 
   &__description_block {
     min-width: 270px;
+    padding-top: 15px;
     padding-left: 30px;
-
-    line-height: 0.5rem;
-  }
-
-  &__description_block * {
-    margin-bottom: 25px;
   }
 
   &__three-day-forecast {
@@ -80,9 +96,29 @@
   }
 
   &__icon {
-    width: 55px;
+    position: relative;
 
     transform: translateY(-7px);
+
+    animation-name: icon-animation;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+
+    .icon {
+      width: 55px;
+    }
+  }
+
+  @keyframes icon-animation {
+    from {
+      left: -5px;
+    }
+
+    to {
+      left: 5px;
+    }
   }
 }
 

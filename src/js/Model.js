@@ -25,7 +25,7 @@ const MODEL = {
         <p class="weather__temperature">
          <span class="temp-value">{temperature}</span>°</p>
         <div class="weather__icon">
-         <img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/{icon}.png">
+         <img class="icon" src="https://www.weatherbit.io/static/img/icons/{icon}.png">
         </div>
       </>
     </div>`,
@@ -65,6 +65,18 @@ const MODEL = {
         </li>
       </ul>
     </div><span>Loading</span>`,
+
+  modal: `
+  <div class="modal">
+    <div class="modal__button-close"></div>
+    <p class="modal__message">{message}</p>
+  </div>`,
+  messageKeys: {
+    ru: ['Город не найден', 'К сожалению, на стороне сервера возникли ошибки. Попробуйте снова!'],
+    en: ['Unfortunately, server-side errors have occurred. Try it again!'],
+    // en: ['Сity not found', 'Unfortunately, server-side errors have occurred. Try it again!'],
+    be: ['Горад не знойдзены', 'На жаль, на боку сервера паўсталі памылкі. Паспрабуйце зноў!'],
+  },
 };
 
 export default MODEL;

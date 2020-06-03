@@ -5,9 +5,11 @@ import setCorrectDate from './modules/setCorrectDate';
 import getFormattedCoordinates from './modules/getFormattedCoordinates';
 import getPlaceholderValue from './modules/getPlaceholderValue';
 import checkDate from './modules/checkDate';
+import showMessage from './modules/showMessage';
 
 class View {
   constructor() {
+    this.main = document.querySelector('.main');
     this.loaderContainer = document.querySelector('.loader-container');
     this.search = document.querySelector('.search');
     this.weatherCity = document.querySelector('.weather__city');
@@ -89,6 +91,12 @@ class View {
 
   renderMap(location) {
     drawMap(location);
+  }
+
+  showModalMessage(template, message) {
+    const formattedTemplate = template.replace(/\{message\}/g, message);
+    console.log('showModalMessage', this.main);
+    this.main.insertAdjacentHTML('afterBegin', formattedTemplate);
   }
 }
 

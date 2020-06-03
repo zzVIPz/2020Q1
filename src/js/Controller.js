@@ -259,9 +259,33 @@ class Controller {
         this.location = `${coordinates.lat},${coordinates.lng}`;
         this.getWeatherInformation(this.location);
       } else {
-        //todo: show modal
-        console.log('Нет такого города!!!');
+        const key = this.model.messageKeys[this.language][0];
+        this.view.showModalMessage(this.model.modal, key);
+        this.addButtonCloseModalClickHandler();
+        this.setSetTimeout();
       }
+    }
+  }
+
+  setSetTimeout() {
+    this.modalTimer = setTimeout(() => {
+      this.removeModalWindow();
+    }, 3000);
+  }
+
+  addButtonCloseModalClickHandler() {
+    const closeBtn = document.querySelector('.modal__button-close');
+    closeBtn.addEventListener('click', () => {
+      clearTimeout(this.modalTimer);
+      this.removeModalWindow();
+    });
+  }
+
+  removeModalWindow() {
+    const modal = document.querySelector('.modal');
+    clearTimeout(this.modalTimer);
+    if (modal) {
+      modal.remove();
     }
   }
 
@@ -323,14 +347,15 @@ class Controller {
 
   async fetchAsync(url) {
     try {
-      //todo: add property for request
       const result = await fetch(url);
       const data = await result.json();
       if (result.status === 401) throw new Error(data.errors[0]);
       return data;
     } catch (err) {
-      //todo: add show message error
-      console.log('*!!!!!!!!!!!!', this.model.errorMsg, err);
+      const key = this.model.messageKeys[this.language][1];
+      this.view.showModalMessage(this.model.modal, key);
+      this.addButtonCloseModalClickHandler();
+      this.setSetTimeout();
     }
     return null;
   }

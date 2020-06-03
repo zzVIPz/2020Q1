@@ -29,7 +29,7 @@
     text-align: end;
     color: white;
 
-    @include font($size: 1rem, $height: 0rem, $weight: normal, $style: italic);
+    @include font($size: 1rem, $height: 1.25rem, $weight: normal, $style: italic);
   }
 }
 
