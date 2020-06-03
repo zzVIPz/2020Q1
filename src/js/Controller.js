@@ -29,6 +29,7 @@ class Controller {
     this.loader = document.querySelector('.loader-container');
     this.weatherContainer = document.querySelector('.weather__container');
     this.microphone = document.querySelector('.button__microphone');
+    this.info = document.querySelector('.weather__info-block');
     this.volume = null;
     this.location = null;
     this.microphoneState = false;
@@ -122,6 +123,7 @@ class Controller {
     this.addButtonEnterClickHandler();
     this.addButtonMicrophoneClickHandler();
     this.addButtonSpeakerClickHandler();
+    this.addInfoClickHandler();
   }
 
   async getUserLocation() {
@@ -271,6 +273,13 @@ class Controller {
     this.modalTimer = setTimeout(() => {
       this.removeModalWindow();
     }, 3000);
+  }
+
+  addInfoClickHandler() {
+    this.info.addEventListener('click', () => {
+      this.view.showModalMessage(this.model.modal, this.model.info[this.language]);
+      this.addButtonCloseModalClickHandler();
+    });
   }
 
   addButtonCloseModalClickHandler() {

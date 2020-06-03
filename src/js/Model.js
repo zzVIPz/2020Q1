@@ -73,9 +73,22 @@ const MODEL = {
   </div>`,
   messageKeys: {
     ru: ['Город не найден', 'К сожалению, на стороне сервера возникли ошибки. Попробуйте снова!'],
-    en: ['Unfortunately, server-side errors have occurred. Try it again!'],
-    // en: ['Сity not found', 'Unfortunately, server-side errors have occurred. Try it again!'],
+    en: ['Сity not found', 'Unfortunately, server-side errors have occurred. Try it again!'],
     be: ['Горад не знойдзены', 'На жаль, на боку сервера паўсталі памылкі. Паспрабуйце зноў!'],
+  },
+  info: {
+    ru: `
+    <p class="modal__title">Информация</p>
+    <p class="modal__description"><span class="modal__subtitle">ПОГОДА, ПРОГНОЗ</span> - голосовые уведомления о прогнозе погоды</p>
+    <p class="modal__description"><span class="modal__subtitle">ГРОМЧЕ, ТИШЕ</span> - кодовые фразы управления громкостью</p>`,
+    en: `
+    <p class="modal__title">Information</p>
+    <p class="modal__description"><span class="modal__subtitle">WEATHER, FORECAST</span> - weather voice commands</p>
+    <p class="modal__description"><span class="modal__subtitle">LOUDLY, QUIETLY</span> - volume control code phrases</p>`,
+    be: `
+    <p class="modal__title">Iнфармацыя</p>
+    <p class="modal__description"><span class="modal__subtitle">НАДВОР'Е, ПРАГНОЗ</span> - галасавыя паведамлення аб прагнозе надвор'я</p>
+    <p class="modal__description"><span class="modal__subtitle">ГУЧНЕЙ, ЦIШЭЙ</span> - кодавыя фразы кіравання гучнасцю</p>`,
   },
 };
 

@@ -21,11 +21,28 @@
     height: 20px;
 
     background: url("../assets/svg/close.svg") center/20px no-repeat;
+    cursor: pointer;
   }
 
   &__message {
     color: red;
 
     @include font($size: 1.25rem, $height: 1.45rem, $weight: normal);
+  }
+
+  &__title {
+    text-align: center;
+
+    @include font($size: 2rem, $height: 1.45rem, $weight: bold);
+  }
+
+  &__description {
+    @include font($size: 1.5rem, $height: 1.7rem, $weight: normal, $style: italic);
+  }
+
+  &__subtitle {
+    color: red;
+
+    @include font($size: 1.7rem, $height: 1.7rem, $weight: normal);
   }
 }

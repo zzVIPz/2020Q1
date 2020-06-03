@@ -1,6 +1,6 @@
 .control {
   position: absolute;
-  right: 155px;
+  right: 145px;
 
   display: none;
 
@@ -11,7 +11,6 @@
 
 .button-change-background {
   width: 50px;
-  margin-right: 10px;
 
   background: url(../assets/svg/refresh.svg) center/26px no-repeat;
   border: none;
@@ -26,7 +25,6 @@
 
 .button-speaker {
   width: 50px;
-  margin-right: 10px;
 
   background: url(../assets/svg/speaker.svg) center/31px no-repeat;
   border: none;
@@ -40,7 +38,7 @@
 }
 
 #language {
-  margin-right: 20px;
+  margin-right: 10px;
 
   color: white;
 
