@@ -2,10 +2,9 @@
 /* eslint-disable no-undef */
 
 import getCorrectUrl from './modules/getCorrectUrl';
-import convertTemperature from './modules/convertTemperature';
 import getMessage from './modules/getMessage';
 import checkVoiceMessage from './modules/checkVoiceMessage';
-import setVolume from './modules/setVolume';
+import changeVolume from './modules/changeVolume';
 
 class Controller {
   constructor(model, view) {
@@ -100,7 +99,7 @@ class Controller {
     );
     if (this.temperature === 'f') {
       this.toggle.checked = true;
-      this.callConvertTemperature();
+      this.view.callConvertTemperature(this.temperature);
     }
   }
 
@@ -231,7 +230,7 @@ class Controller {
           }
           if (command) {
             if (this.message) {
-              this.message.volume = setVolume(command, this.message.volume);
+              this.message.volume = changeVolume(command, this.message.volume);
               this.search.value = '';
             }
           } else {
@@ -342,13 +341,8 @@ class Controller {
     this.switch.addEventListener('click', () => {
       this.temperature = this.temperature === 'c' ? 'f' : 'c';
       localStorage.temperature = this.temperature;
-      this.callConvertTemperature();
+      this.view.callConvertTemperature(this.temperature);
     });
-  }
-
-  callConvertTemperature() {
-    const temperatureNodes = document.querySelectorAll('.temp-value');
-    convertTemperature(this.temperature, temperatureNodes);
   }
 
   async fetchAsync(url) {

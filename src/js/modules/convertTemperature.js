@@ -8,17 +8,12 @@ function convertFtoC(fahrenheit) {
   return celsius;
 }
 
-export default function convertTemperature(temperature, nodes) {
+export default function convertTemperature(temperature, value) {
+  let convertedValue = value;
   if (temperature === 'f') {
-    nodes.forEach((tag) => {
-      const value = tag;
-      value.innerText = convertCtoF(value.innerText);
-    });
-  } else {
-    nodes.forEach((tag) => {
-      const value = tag;
-      value.innerText = convertFtoC(value.innerText);
-      return null;
-    });
+    convertedValue = convertCtoF(value);
+    return convertedValue;
   }
+  convertedValue = convertFtoC(value);
+  return convertedValue;
 }

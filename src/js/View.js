@@ -1,10 +1,11 @@
 import getCardOfThreeDayForecastTemplate from './modules/getCardOfThreeDayForecastTemplate';
 import getIconSrcTemplate from './modules/getIconSrcTemplate';
 import drawMap from './modules/renderMap';
-import setCorrectDate from './modules/setCorrectDate';
+import getCorrectDate from './modules/getCorrectDate';
 import getFormattedCoordinates from './modules/getFormattedCoordinates';
 import getPlaceholderValue from './modules/getPlaceholderValue';
 import checkDate from './modules/checkDate';
+import convertTemperature from './modules/convertTemperature';
 
 class View {
   constructor() {
@@ -36,12 +37,13 @@ class View {
   }
 
   dateRender(language, timezone) {
-    this.weatherDate.innerText = setCorrectDate(language, this.weatherDate, timezone);
+    this.weatherDate.innerText = getCorrectDate(language, this.weatherDate.dataset, timezone);
   }
 
   locationInfoRender(cityInfo, language) {
     const { components } = cityInfo.results[0];
-    const [latitude, longitude] = getFormattedCoordinates(cityInfo.results[0].geometry, language);
+    const { geometry } = cityInfo.results[0];
+    const [latitude, longitude] = getFormattedCoordinates(geometry.lat, geometry.lng, language);
     this.weatherCity.innerText = components.town || components.city || components.state;
     this.weatherCountry.innerText = components.country;
     this.latitude.innerText = latitude;
@@ -70,7 +72,7 @@ class View {
     this.weatherThreeDayForecast.innerHTML = '';
     let counter = 0;
     weatherData.data.forEach((data, index) => {
-      if (index && checkDate(weatherData.timezone, data) && counter < 3) {
+      if (index && checkDate(weatherData.timezone, data.datetime) && counter < 3) {
         counter += 1;
         const param = weatherData.data[index];
         const date = param.datetime.split('-');
@@ -92,6 +94,14 @@ class View {
     if (this.map) {
       drawMap(location);
     }
+  }
+
+  callConvertTemperature(temperature) {
+    this.temperatureNodes = document.querySelectorAll('.temp-value');
+    this.temperatureNodes.forEach((tag) => {
+      const value = tag;
+      value.innerText = convertTemperature(temperature, value.innerText);
+    });
   }
 
   showModalMessage(template, message) {

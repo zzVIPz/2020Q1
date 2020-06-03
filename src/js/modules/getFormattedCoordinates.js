@@ -13,8 +13,8 @@ function getCoordinatesStr(coordinate) {
   return formattedStr;
 }
 
-export default function getFormattedCoordinates(cityInfo, language) {
-  const latitude = `${TRANSLATE[language][0]}: ${getCoordinatesStr(cityInfo.lat)}`;
-  const longitude = `${TRANSLATE[language][1]}: ${getCoordinatesStr(cityInfo.lng)}`;
+export default function getFormattedCoordinates(lat, lng, language) {
+  const latitude = `${TRANSLATE[language][0]}: ${getCoordinatesStr(lat)}`;
+  const longitude = `${TRANSLATE[language][1]}: ${getCoordinatesStr(lng)}`;
   return [latitude, longitude];
 }

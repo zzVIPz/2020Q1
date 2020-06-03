@@ -74,8 +74,8 @@ function getTimesOfDay(hours) {
   return 'evening';
 }
 
-export default function setCorrectDate(language, node, timezone) {
-  const dataNode = node.dataset;
+export default function getCorrectDate(language, node, timezone) {
+  const dataNode = node;
   const adjustedTime = new Date().toLocaleString('en-US', { timeZone: timezone });
   const date = new Date(adjustedTime);
   const dateArray = String(date).split(' ');
