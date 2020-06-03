@@ -1,5 +1,7 @@
-L.mapbox.accessToken =
-  'pk.eyJ1Ijoienp2aXB6IiwiYSI6ImNrYXN3a2RpejA0anoycHA4d29oMDRjYWsifQ.YtKlezGJbyQRhADhwZb9KQ';
+/* global L */
+/* eslint-disable no-undef */
+
+L.mapbox.accessToken = 'pk.eyJ1Ijoienp2aXB6IiwiYSI6ImNrYXN3a2RpejA0anoycHA4d29oMDRjYWsifQ.YtKlezGJbyQRhADhwZb9KQ';
 let map = null;
 
 export default function renderMap(location) {

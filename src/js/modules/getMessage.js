@@ -13,6 +13,5 @@ export default function getMessage(language, ...args) {
     str += `${value}. `;
     return str;
   }, '');
-  console.log('getMessage', message);
   return message;
 }

@@ -1,4 +1,4 @@
-const WEATHER_VALUES = ['погода', 'прогноз', 'weather', 'forecast', `надвор'е`, 'прагноз'];
+const WEATHER_VALUES = ['погода', 'прогноз', 'weather', 'forecast', "надвор'е", 'прагноз'];
 const LOUDLY_COMMANDS = ['гучней', 'громче', 'loudly'];
 const QUIETLY_COMMANDS = ['цішэй', 'тише', 'quietly'];
 

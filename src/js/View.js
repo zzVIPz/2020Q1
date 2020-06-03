@@ -5,13 +5,13 @@ import setCorrectDate from './modules/setCorrectDate';
 import getFormattedCoordinates from './modules/getFormattedCoordinates';
 import getPlaceholderValue from './modules/getPlaceholderValue';
 import checkDate from './modules/checkDate';
-import showMessage from './modules/showMessage';
 
 class View {
   constructor() {
     this.main = document.querySelector('.main');
     this.loaderContainer = document.querySelector('.loader-container');
     this.search = document.querySelector('.search');
+    this.map = document.querySelector('#map');
     this.weatherCity = document.querySelector('.weather__city');
     this.weatherCountry = document.querySelector('.weather__country');
     this.weatherDate = document.querySelector('.weather__date');
@@ -49,9 +49,8 @@ class View {
   }
 
   dailyForecastRender(template, description, weatherData) {
-    //todo: need refartor - get forrmated string
     const param = weatherData.data[0];
-    const spanTag = `<span class="temp-value">{value}</span>`;
+    const spanTag = '<span class="temp-value">{value}</span>';
     const imageSrcTemplate = getIconSrcTemplate(template, param.weather.icon);
     this.weatherImage.innerHTML = imageSrcTemplate;
     this.weatherTemp.innerHTML = spanTag.replace(/\{value\}/g, Math.ceil(param.temp));
@@ -90,12 +89,13 @@ class View {
   }
 
   renderMap(location) {
-    drawMap(location);
+    if (this.map) {
+      drawMap(location);
+    }
   }
 
   showModalMessage(template, message) {
     const formattedTemplate = template.replace(/\{message\}/g, message);
-    console.log('showModalMessage', this.main);
     this.main.insertAdjacentHTML('afterBegin', formattedTemplate);
   }
 }

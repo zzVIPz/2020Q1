@@ -64,12 +64,9 @@ class Controller {
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
     const threeDayForecast = await this.getWeatherData(this.threeDayForecastAPIUrl, location);
-    console.log('cityInfo', cityInfo);
-    console.log('dailyForecast', dailyForecast);
-    console.log('threeDayForecast', threeDayForecast);
     this.renderTemplate(cityInfo, dailyForecast, threeDayForecast, location);
     this.setSetInterval(threeDayForecast.timezone);
-    // await this.changeBackgroundImage();
+    await this.changeBackgroundImage();
     this.toggleLoaderDisplay(false);
     this.view.renderMap(location);
   }
