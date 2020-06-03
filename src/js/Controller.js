@@ -4,6 +4,8 @@
 import getCorrectUrl from './modules/getCorrectUrl';
 import convertTemperature from './modules/convertTemperature';
 import getMessage from './modules/getMessage';
+import checkVoiceMessage from './modules/checkVoiceMessage';
+import setVolume from './modules/setVolume';
 
 class Controller {
   constructor(model, view) {
@@ -27,6 +29,7 @@ class Controller {
     this.loader = document.querySelector('.loader-container');
     this.weatherContainer = document.querySelector('.weather__container');
     this.microphone = document.querySelector('.button__microphone');
+    this.volume = null;
     this.location = null;
     this.microphoneState = false;
     this.speakerState = false;
@@ -35,6 +38,13 @@ class Controller {
   }
 
   async init() {
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.message = new SpeechSynthesisUtterance();
+    this.message.volume = 0.8;
+    this.message.addEventListener('end', () => {
+      this.speakerState = !this.speakerState;
+      this.buttonSpeaker.classList.remove('button-speaker--active');
+    });
     this.language = localStorage.language || this.language;
     this.temperature = localStorage.temperature || this.temperature;
     this.selectLanguage.value = this.language;
@@ -48,6 +58,7 @@ class Controller {
   }
 
   async getWeatherInformation(location) {
+    speechSynthesis.cancel();
     this.microphoneState = false;
     const cityInfo = await this.getCityInfo(location);
     const dailyForecast = await this.getWeatherData(this.dailyForecastAPIUrl, location);
@@ -167,25 +178,25 @@ class Controller {
 
   addButtonSpeakerClickHandler() {
     this.buttonSpeaker.addEventListener('click', () => {
-      this.buttonSpeaker.classList.toggle('button-speaker--active');
-      this.speakerState = !this.speakerState;
-      if (this.speakerState) {
-        this.listenToWetherForecast();
-      } else {
-        speechSynthesis.cancel();
-        this.speakerState = !this.speakerState;
-      }
+      this.toggleSpeaker();
     });
   }
 
-  listenToWetherForecast() {
-    const message = new SpeechSynthesisUtterance();
-    message.lang = this.language;
-    message.addEventListener('end', () => {
+  toggleSpeaker() {
+    this.buttonSpeaker.classList.toggle('button-speaker--active');
+    this.speakerState = !this.speakerState;
+    if (this.speakerState) {
+      this.listenToWetherForecast();
+    } else {
+      speechSynthesis.cancel();
       this.speakerState = !this.speakerState;
-      this.buttonSpeaker.classList.remove('button-speaker--active');
-    });
-    message.text = getMessage(
+    }
+  }
+
+  listenToWetherForecast() {
+    this.message.lang = this.language;
+    this.message.lang = this.message.lang === 'be' ? 'ru' : this.message.lang;
+    this.message.text = getMessage(
       this.language,
       document.querySelector('.weather__city').innerText,
       document.querySelector('.weather__country').innerText,
@@ -195,11 +206,10 @@ class Controller {
       document.querySelector('.weather__wind_speed').innerText,
       document.querySelector('.weather__relative_humidity').innerText,
     );
-    speechSynthesis.speak(message);
+    speechSynthesis.speak(this.message);
   }
 
   recordSpeech() {
-    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     this.search.value = '';
     let requestCounter = 0;
     this.recognition = new SpeechRecognition();
@@ -215,13 +225,24 @@ class Controller {
         requestCounter += 1;
         setTimeout(() => {
           this.microphone.classList.remove('button__microphone--active');
-          this.getData();
+          const command = checkVoiceMessage(this.search.value);
+          if (command === 'weather') {
+            this.toggleSpeaker();
+            this.search.value = '';
+          }
+          if (command) {
+            if (this.message) {
+              this.message.volume = setVolume(command, this.message.volume);
+              this.search.value = '';
+            }
+          } else {
+            this.getData();
+          }
         }, 2000);
       }
     });
 
     this.recognition.addEventListener('end', () => {
-      console.log('listener---end');
       this.microphoneState = false;
       this.microphone.classList.remove('button__microphone--active');
     });
@@ -275,7 +296,6 @@ class Controller {
         this.clearTimer();
         this.language = this.selectLanguage.value;
         localStorage.language = this.language;
-        speechSynthesis.cancel();
         this.getWeatherInformation(this.location);
         this.toggleLoaderDisplay(true);
       }
