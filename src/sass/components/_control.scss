@@ -17,6 +17,14 @@
   border-radius: 50%;
   outline: none;
   cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.button-change-background:hover,
+.button-speaker:hover,
+#language:hover {
+  transform: scale(1.1, 1.1);
 }
 
 .button-change-background--load {
@@ -31,6 +39,8 @@
   border-radius: 50%;
   outline: none;
   cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
 .button-speaker--active {
@@ -42,10 +52,12 @@
 
   color: white;
 
-  background-color: #171a1bc9;
+  background-color: #171a1b3b;
   border: none;
   outline: none;
   cursor: pointer;
+
+  transition: all 0.3s ease;
 
   @include font($size: 2.7rem, $height: 1.25rem, $weight: bold);
 }

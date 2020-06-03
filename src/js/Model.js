@@ -66,9 +66,18 @@ const MODEL = {
     <p class="modal__message">{message}</p>
   </div>`,
   messageKeys: {
-    ru: ['Город не найден', 'К сожалению, на стороне сервера возникли ошибки. Попробуйте снова!'],
-    en: ['Сity not found', 'Unfortunately, server-side errors have occurred. Try it again!'],
-    be: ['Горад не знойдзены', 'На жаль, на боку сервера паўсталі памылкі. Паспрабуйце зноў!'],
+    ru: [
+      'Город не найден',
+      'К сожалению, на стороне сервера возникли ошибки. Пожалуйста, попробуйте снова позже!',
+    ],
+    en: [
+      'Сity not found',
+      'Unfortunately, server-side errors have occurred. Please, try it again later!',
+    ],
+    be: [
+      'Горад не знойдзены',
+      'На жаль, на боку сервера паўсталі памылкі. Калі ласка, паспрабуйце зноў пазней!',
+    ],
   },
   info: {
     ru: `
