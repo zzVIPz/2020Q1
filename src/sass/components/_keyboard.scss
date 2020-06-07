@@ -1,0 +1,13 @@
+.keyboard {
+  padding: 5px;
+  overflow: hidden;
+
+  background-color: $color-background-keyboard;
+  border: 1px solid $color-border-keyboard;
+  border-radius: 5px;
+
+  &__line {
+    display: flex;
+    justify-content: space-between;
+  }
+}

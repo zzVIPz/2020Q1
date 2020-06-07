@@ -11,6 +11,16 @@
     background: url("../assets/svg/clear.svg") center/18px no-repeat #ffffff;
   }
 
+  &__keyboard {
+    width: 50px;
+
+    background: url("../assets/svg/keyboard.svg") center/35px no-repeat #ffffff;
+  }
+
+  &__keyboard--active {
+    background: url("../assets/svg/keyboard-active.svg") center/35px no-repeat #ffffff;
+  }
+
   &__search {
     background: url("../assets/svg/search.svg") center/20px no-repeat #ffffff;
     border-right: 1px solid black;

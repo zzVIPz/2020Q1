@@ -29,6 +29,10 @@ class View {
     });
     return cardTemplate;
   }
+
+  showKeyboard() {}
+
+  hideKeyboard() {}
 }
 
 export default View;

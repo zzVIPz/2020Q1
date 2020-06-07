@@ -1,9 +1,13 @@
 import Swiper from 'swiper';
+import KeyboardController from './keyboard-module/Controller';
+import KeyboardModel from './keyboard-module/Model';
+import KeyboardView from './keyboard-module/View';
 
 class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
+    this.keyboard = null;
     this.input = document.querySelector('.movie__search');
     this.btnSearch = document.querySelector('.button__search');
     this.btnClear = document.querySelector('.button__clear');
@@ -11,7 +15,9 @@ class Controller {
     this.loader = document.querySelector('.loader-container');
     this.indicator = document.querySelector('.indicator-container');
     this.info = document.querySelector('.movie__info-block');
+    this.keyboardShowButton = document.querySelector('.button__keyboard');
     this.swiper = null;
+    this.keyboardState = false;
     this.value = null;
     this.currentValue = null;
     this.value = null;
@@ -59,6 +65,7 @@ class Controller {
         prevEl: '.swiper-button-prev',
       },
     });
+
     this.addListeners();
     this.toggleLoaderDisplay(true);
     this.getRequestData('dream', 1);
@@ -70,6 +77,7 @@ class Controller {
     this.addButtonSearchClickHandler();
     this.addSlideChangeHandler();
     this.addImagesLoaderHandler();
+    this.addButtonKeyboardClickHandler();
   }
 
   addButtonEnterClickHandler() {
@@ -92,6 +100,32 @@ class Controller {
     bntSearch.addEventListener('click', () => {
       this.checkValue();
     });
+  }
+
+  addButtonKeyboardClickHandler() {
+    this.keyboardShowButton.addEventListener('click', () => {
+      if (!this.keyboard) {
+        this.initKeyboard();
+      }
+      this.keyboardState = !this.keyboardState;
+      if (this.keyboardState) {
+        this.keyboardContainer.classList.add('keyboard__container--active');
+        this.keyboardShowButton.classList.add('button__keyboard--active');
+      } else {
+        this.keyboardContainer.classList.remove('keyboard__container--active');
+        this.keyboardShowButton.classList.remove('button__keyboard--active');
+      }
+    });
+  }
+
+  initKeyboard() {
+    this.keyboard = new KeyboardController(
+      KeyboardModel,
+      new KeyboardView(),
+      this.checkValue.bind(this),
+    );
+    this.keyboard.init();
+    this.keyboardContainer = document.querySelector('.keyboard__container');
   }
 
   addImagesLoaderHandler() {
