@@ -49,3 +49,12 @@
 [data-btn-code="Space"] {
   width: 44%;
 }
+
+@media (max-width: 920px) {
+  .main {
+    .button__keyboard,
+    .keyboard__container {
+      display: none;
+    }
+  }
+}

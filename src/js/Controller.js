@@ -2,6 +2,8 @@ import Swiper from 'swiper';
 import KeyboardController from './keyboard-module/Controller';
 import KeyboardModel from './keyboard-module/Model';
 import KeyboardView from './keyboard-module/View';
+import getCorrectUrl from './modules/getCorrectUrl';
+import checkLetters from './modules/checkLetters';
 
 class Controller {
   constructor(model, view) {
@@ -17,20 +19,20 @@ class Controller {
     this.info = document.querySelector('.movie__info-block');
     this.keyboardShowButton = document.querySelector('.button__keyboard');
     this.swiper = null;
+    this.translate = null;
     this.keyboardState = false;
     this.value = null;
     this.currentValue = null;
-    this.value = null;
-    this.state = true;
     this.index = 5;
     this.page = 1;
-    this.totalResults = 0;
+    this.totalResults = 20;
     this.loading = false;
     this.movieApiUrl = this.model.movieApiUrl;
     this.translateApiUrl = this.model.translateApiUrl;
   }
 
   init() {
+    const defaultRequestValue = 'dream';
     this.view.init(this.model.swiper, this.model.loader, this.model.indicator);
     this.swiper = new Swiper('.swiper-container', {
       breakpoints: {
@@ -58,7 +60,7 @@ class Controller {
         el: '.swiper-pagination',
         clickable: true,
         dynamicBullets: true,
-        dynamicMainBullets: 10,
+        dynamicMainBullets: 5,
       },
       navigation: {
         nextEl: '.swiper-button-next',
@@ -66,9 +68,12 @@ class Controller {
       },
     });
 
-    this.addListeners();
     this.toggleLoaderDisplay(true);
-    this.getRequestData('dream', 1);
+    this.getRequestData(defaultRequestValue);
+    this.currentValue = defaultRequestValue;
+    this.previousTranslate = defaultRequestValue;
+    this.translate = defaultRequestValue;
+    this.addListeners();
   }
 
   addListeners() {
@@ -91,7 +96,7 @@ class Controller {
   addButtonClearClickHandler() {
     const bntClear = document.querySelector('.button__clear');
     bntClear.addEventListener('click', () => {
-      this.setDefaultState(true);
+      this.clearInput();
     });
   }
 
@@ -129,17 +134,17 @@ class Controller {
   }
 
   addImagesLoaderHandler() {
-    //TODO: add lazy load image
+    // TODO: add lazy load image
   }
 
   async checkValue() {
-    const { value } = this.input;
-    if (value && value !== this.currentValue) {
-      this.currentValue = value;
-      this.value = await this.checkLanguage(value);
+    this.value = this.input.value;
+    if (this.value && this.value !== this.currentValue) {
+      this.previousTranslate = this.translate;
+      this.translate = await this.checkLanguage(this.value);
+      this.currentValue = this.value;
       this.toggleLoaderDisplay(true);
-      this.setDefaultState();
-      this.getRequestData(this.value, this.page);
+      this.getRequestData(this.translate);
     }
   }
 
@@ -148,17 +153,40 @@ class Controller {
     this.checkResponseData(data);
   }
 
+  checkResponseData(data) {
+    if (data.Response === 'True') {
+      if (this.translate !== this.previousTranslate) {
+        this.setDefaultState();
+      }
+      this.showResponseMessage(data);
+      this.getMovies(data);
+    }
+    if (data.Response === 'False') {
+      this.toggleLoaderDisplay();
+      this.toggleIndicatorDisplay();
+      this.showResponseMessage(data);
+    }
+  }
+
+  async getMovies(data) {
+    const extendedData = await this.addMovieRating(data);
+    this.page += 1;
+    this.toggleLoaderDisplay();
+    this.toggleIndicatorDisplay();
+    this.renderCard(extendedData);
+  }
+
   async getData(mode, value, page) {
-    const url = this.getCorrectUrl(mode, value, page);
+    const url = getCorrectUrl(this.movieApiUrl, mode, value, page);
     const res = await fetch(url);
     const data = await res.json();
     return data;
   }
 
   async checkLanguage(value) {
-    if (/[а-я]/i.test(value)) {
+    if (checkLetters(value)) {
       const data = await this.translateRequest(value);
-      return data;
+      return data[0];
     }
     return value;
   }
@@ -170,45 +198,25 @@ class Controller {
     return data.text;
   }
 
-  checkResponseData(data) {
-    if (data.Response === 'True') {
-      this.showResponseMessage(data);
-      this.getMovies(data);
-    }
-    if (data.Response === 'False') {
-      this.toggleLoaderDisplay();
-      this.toggleIndicatorDisplay();
-      this.showResponseMessage(data);
-    }
-  }
-
   showResponseMessage(data) {
     if (data.Response === 'True' && this.currentValue) {
-      this.state = false;
       let result = 'movies';
       this.totalResults = data.totalResults;
       if (data.totalResults === '1') {
         result = 'movie';
       }
-      this.info.innerHTML = `We have ${data.totalResults} ${result} for your request "${this.value}"!`;
+      this.info.innerHTML = `We have ${data.totalResults} ${result} for request "${this.translate}"!`;
     }
-    if (data.Response === 'False' && this.state) {
+    if (data.Response === 'False') {
       if (data.Error === 'Request limit reached!') {
         this.info.innerHTML = this.model.errorMessage;
       } else {
         this.info.innerHTML = `We regret it, but for your request "${
-          this.currentValue
+          this.translate
         }" ${data.Error.toLowerCase()} Please, try again!`;
+        this.translate = this.previousTranslate;
       }
     }
-  }
-
-  async getMovies(data) {
-    const extendedData = await this.addMovieRating(data);
-    this.setRequestPageNumber();
-    this.toggleLoaderDisplay();
-    this.toggleIndicatorDisplay();
-    this.renderCard(extendedData);
   }
 
   renderCard(data) {
@@ -216,31 +224,6 @@ class Controller {
       const templateCard = this.view.createCard(card, this.model.card);
       this.swiper.appendSlide(templateCard);
     });
-    this.swiper.update();
-    if (this.page === 2) {
-      this.swiper.slideToLoop(0);
-    }
-  }
-
-  setRequestPageNumber(key) {
-    if (key) {
-      this.page = 1;
-    } else {
-      this.page += 1;
-    }
-  }
-
-  getCorrectUrl(mode, value, page) {
-    let url = this.movieApiUrl.replace(/\{type\}/g, mode);
-    if (page) {
-      url = url.replace(/\{page\}/g, `page=${page}&`);
-    } else {
-      url = url.replace(/\{page\}/g, '');
-    }
-    if (value) {
-      url = url.replace(/\{key\}/g, value);
-    }
-    return url;
   }
 
   addMovieRating(data) {
@@ -258,8 +241,10 @@ class Controller {
   toggleLoaderDisplay(mode) {
     if (mode) {
       this.loader.classList.remove('loader--disabled');
+      this.container.classList.add('movie__cards-container--disabled');
     } else {
       this.loader.classList.add('loader--disabled');
+      this.container.classList.remove('movie__cards-container--disabled');
     }
   }
 
@@ -275,17 +260,18 @@ class Controller {
     this.swiper.removeAllSlides();
   }
 
-  setDefaultState(mode) {
-    if (mode) {
-      this.input.value = '';
-      this.currentValue = null;
-    }
-    this.state = true;
+  setDefaultState() {
     this.info.innerHTML = '';
     this.clearMoviesContainer();
+    this.previousTranslate = this.translate;
     this.page = 1;
     this.index = 5;
     this.totalResults = 0;
+  }
+
+  clearInput() {
+    this.input.value = '';
+    this.currentValue = null;
   }
 
   addSlideChangeHandler() {
@@ -294,7 +280,7 @@ class Controller {
       if (index + 5 >= this.index && index <= this.totalResults - 10) {
         this.index += 5;
         this.toggleIndicatorDisplay(true);
-        this.getRequestData(this.value, this.page);
+        this.getRequestData(this.translate, this.page);
       }
     });
   }

@@ -27,12 +27,9 @@ class View {
       }
       cardTemplate = cardTemplate.replace(`{${property}}`, data[property]);
     });
+    // console.log('cardTemplate', cardTemplate);
     return cardTemplate;
   }
-
-  showKeyboard() {}
-
-  hideKeyboard() {}
 }
 
 export default View;
