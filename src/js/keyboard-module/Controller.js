@@ -25,10 +25,6 @@ class Controller {
   }
 
   addEventHandlers() {
-    // document.addEventListener('keydown', (event) => this.pressKeyDownHandler(event));
-    // document.addEventListener('keyup', (event) => this.pressKeyUpHandler(event));
-    // document.addEventListener('mousedown', (event) => this.pressMouseKeyDownHandler(event));
-    // document.addEventListener('mouseup', (event) => this.pressMouseKeyUpHandler(event));
     document.addEventListener('keydown', (event) => this.pressKeyDownHandler(event));
     document.addEventListener('keyup', (event) => this.pressKeyUpHandler(event));
     document.addEventListener('mousedown', (event) => this.pressMouseKeyDownHandler(event));
@@ -92,6 +88,7 @@ class Controller {
   }
 
   pressMouseKeyUpHandler() {
+    document.removeEventListener('mousemove', this.bindedOnMouseMove);
     if (this.event) {
       this.getEmulateKeyboardEvent(this.event);
       const eventKeyboard = new KeyboardEvent('keyup', this.getEmulateKeyboardEvent(this.event));
@@ -229,9 +226,9 @@ class Controller {
   changeLanguageHandler(attribute) {
     this.pressedButtons.add(attribute);
     if (
-      (this.pressedButtons.has('Control') && this.pressedButtons.has('Alt')) ||
-      (this.pressedButtons.has('Shift') && this.pressedButtons.has('Alt')) ||
-      (this.pressedButtons.has('Shift') && this.pressedButtons.has('Control'))
+      (this.pressedButtons.has('Control') && this.pressedButtons.has('Alt'))
+      || (this.pressedButtons.has('Shift') && this.pressedButtons.has('Alt'))
+      || (this.pressedButtons.has('Shift') && this.pressedButtons.has('Control'))
     ) {
       this.setLanguageToLocalStorage();
       this.renderValueOfKeyboardsBtns(localStorage.getItem('language'));

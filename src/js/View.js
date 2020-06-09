@@ -13,12 +13,7 @@ class View {
     this.indicatorContainer.innerHTML = indicator;
   }
 
-  createCard(card, template) {
-    const cardTemplate = this.getCorrectCardTemplate(card, template);
-    return cardTemplate;
-  }
-
-  getCorrectCardTemplate(card, template) {
+  createCard(card, template, pageNumber) {
     const data = card;
     let cardTemplate = template;
     this.properties.forEach((property) => {
@@ -27,7 +22,7 @@ class View {
       }
       cardTemplate = cardTemplate.replace(`{${property}}`, data[property]);
     });
-    // console.log('cardTemplate', cardTemplate);
+    cardTemplate = cardTemplate.replace(/\{imageID\}/g, `image-page${pageNumber - 1}`);
     return cardTemplate;
   }
 }

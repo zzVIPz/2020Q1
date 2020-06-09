@@ -36,7 +36,8 @@
     "dev": "webpack --mode development --watch",
     "prod": "webpack --mode production",
     "build": "babel src -d lib",
-    "test": "jest"
+    "test": "jest",
+    "lint": "node node_modules/eslint/bin/eslint.js ./src --fix"
   },
   "repository": {
     "type": "git",

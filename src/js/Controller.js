@@ -67,7 +67,7 @@ class Controller {
         prevEl: '.swiper-button-prev',
       },
     });
-
+    this.swiperButton = document.querySelector('.swiper-button-next');
     this.toggleLoaderDisplay(true);
     this.getRequestData(defaultRequestValue);
     this.currentValue = defaultRequestValue;
@@ -81,8 +81,42 @@ class Controller {
     this.addButtonClearClickHandler();
     this.addButtonSearchClickHandler();
     this.addSlideChangeHandler();
-    this.addImagesLoaderHandler();
     this.addButtonKeyboardClickHandler();
+    document.addEventListener('mousedown', (event) => this.moveKeyboard(event));
+    document.addEventListener('dragstart ', () => false);
+    document.addEventListener('mouseleave', (event) => {
+      this.leaveWindow(event);
+    });
+  }
+
+  moveKeyboard(event) {
+    if (event.target.closest('.keyboard__container')) {
+      this.keyboard = document.querySelector('.keyboard__container');
+      this.shiftX = event.clientX - this.keyboard.getBoundingClientRect().left;
+      this.shiftY = event.clientY - this.keyboard.getBoundingClientRect().top;
+      this.moveAt(event.pageX, event.pageY);
+      this.bindedOnMouseMove = this.onMouseMove.bind(this);
+      document.addEventListener('mousemove', this.bindedOnMouseMove);
+      this.keyboard.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', this.bindedOnMouseMove);
+        this.keyboard.style.bottom = 'auto';
+      });
+    }
+  }
+
+  moveAt(pageX, pageY) {
+    this.keyboard.style.left = `${pageX - this.shiftX}px`;
+    this.keyboard.style.top = `${pageY - this.shiftY}px`;
+  }
+
+  onMouseMove(event) {
+    this.moveAt(event.pageX, event.pageY);
+  }
+
+  leaveWindow(event) {
+    if (event.toElement == null && event.relatedTarget == null) {
+      document.removeEventListener('mousemove', this.bindedOnMouseMove);
+    }
   }
 
   addButtonEnterClickHandler() {
@@ -133,10 +167,6 @@ class Controller {
     this.keyboardContainer = document.querySelector('.keyboard__container');
   }
 
-  addImagesLoaderHandler() {
-    // TODO: add lazy load image
-  }
-
   async checkValue() {
     this.value = this.input.value;
     if (this.value && this.value !== this.currentValue) {
@@ -171,8 +201,6 @@ class Controller {
   async getMovies(data) {
     const extendedData = await this.addMovieRating(data);
     this.page += 1;
-    this.toggleLoaderDisplay();
-    this.toggleIndicatorDisplay();
     this.renderCard(extendedData);
   }
 
@@ -219,11 +247,26 @@ class Controller {
     }
   }
 
-  renderCard(data) {
+  async renderCard(data) {
     data.forEach((card) => {
-      const templateCard = this.view.createCard(card, this.model.card);
+      const templateCard = this.view.createCard(card, this.model.card, this.page);
       this.swiper.appendSlide(templateCard);
     });
+    await this.addImagesLoaderHandler(this.page - 1);
+  }
+
+  addImagesLoaderHandler(imageID) {
+    let counter = 0;
+    const images = document.querySelectorAll(`.image-page${imageID}`);
+    images.forEach((image) => image.addEventListener('load', () => {
+      counter += 1;
+      this.totalLoad += 1;
+      if (counter === images.length) {
+        this.toggleLoaderDisplay();
+        this.toggleIndicatorDisplay();
+        this.swiper.update();
+      }
+    }));
   }
 
   addMovieRating(data) {
@@ -251,8 +294,10 @@ class Controller {
   toggleIndicatorDisplay(mode) {
     if (mode) {
       this.indicator.classList.remove('indicator--disabled');
+      this.swiperButton.classList.add('swiper-button-disabled');
     } else {
       this.indicator.classList.add('indicator--disabled');
+      this.swiperButton.classList.remove('swiper-button-disabled');
     }
   }
 

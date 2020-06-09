@@ -8,9 +8,16 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
+  overflow: hidden;
 
   background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%);
 
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none;
+
+   -khtml-user-select: none; /* Konqueror */
   @extend %font-prim;
   @include font($size: 1.6rem, $height: 2.6rem, $weight: normal);
 }

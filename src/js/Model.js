@@ -1,7 +1,7 @@
 const MODEL = {
-  movieApiUrl: `https://www.omdbapi.com/?{type}={key}&{page}apikey=9b67fc54`,
-  //my 3affc28d
-  translateApiUrl: `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200510T172835Z.0ad760ffcfd5afee.8993becde15a7714827f8f6577a3dca31ee25107&text={text}&lang=ru-en`,
+  movieApiUrl: 'https://www.omdbapi.com/?{type}={key}&{page}apikey=3affc28d',
+  translateApiUrl:
+    'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200510T172835Z.0ad760ffcfd5afee.8993becde15a7714827f8f6577a3dca31ee25107&text={text}&lang=ru-en',
   errorMessage:
     'We regret it, but today the limit of requests has been reached. Please, try again later!',
   swiper: `
@@ -17,7 +17,7 @@ const MODEL = {
         <h3 class="card__title">{Title}</h3>
       </a>
       <div class="card__poster">
-        <img class="swiper-lazy" src="{Poster}">
+        <img class="{imageID}" src="{Poster}">
       </div>
       <p class="card__year">{Year}</p>
       <p class="card__rating">
